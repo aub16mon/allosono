@@ -61,8 +61,10 @@
     line-height: 1.04;
     letter-spacing: -1px;
     font-size: clamp(2.2rem, 5.4vw, 4.2rem);
-    /* Remets à 18ch si tu veux forcer le retour à la ligne après "enceinte" */
-    max-width: 22ch; 
+    max-width: 18ch;
+    width: fit-content; /* LA MAGIE : La boîte s'ajuste pile au texte, fini le vide ! */
+    position: relative;
+    padding-right: clamp(45px, 5vw, 65px); /* On laisse l'espace strict pour les barres */
   }
   .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   h2 em,.sub em,.lead em,.grad{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -73,14 +75,15 @@
   
   /* ANIMATION EQ INLINE */
   .eq {
-    display: inline-flex;
+    position: absolute;
+    right: 0;
+    bottom: 0.1em; /* Aligné sur la ligne du bas */
+    height: 1.8em; /* Remonte pile jusqu'à la ligne du dessus ("enceinte") */
+    display: flex;
     align-items: flex-end;
-    height: 1.1em; /* Hauteur parfaite par rapport au texte */
-    margin-left: 14px;
-    vertical-align: text-bottom; /* LA solution : s'aligne sur le bas des lettres, pas de l'animation */
     gap: clamp(4px, 1vw, 6px);
+    margin: 0;
     pointer-events: none;
-    transform: translateY(0.05em); /* Micro-ajustement visuel pour être parfait */
   }
   .eq i {
     width: clamp(6px, 1vw, 10px);
