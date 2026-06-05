@@ -56,72 +56,65 @@
   .pill{display:inline-block;font-size:.82rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);margin-bottom:22px}
   .pill b{color:var(--cyan)}
   
+  /* TITRE PRINCIPAL - 3 LIGNES FIXES */
   .hero h1 {
     font-family: var(--display);
     font-weight: 900;
-    letter-spacing: -1px;
-    font-size: 3.4rem; /* Taille fixe et stable */
     line-height: 1.15;
-    max-width: 760px;
-    height: 3.45em; /* Verrouille la hauteur stricte sur exactement 3 lignes */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    position: relative;
+    letter-spacing: -1px;
+    font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+    max-width: 100%;
+    margin-bottom: 0;
+    min-height: 3.6em; /* Réserve la place exacte pour les 3 lignes pour éviter que le texte du dessous ne saute */
   }
-  .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  h2 em,.sub em,.lead em,.grad{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero h1 em, .hero h1 #dynamic-text {
+    font-style: normal;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
   .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:22px 0 32px}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .hero-note{color:var(--muted);font-size:.9rem;margin-top:22px;display:flex;gap:20px;flex-wrap:wrap}
   .hero-note span{display:flex;align-items:center;gap:7px}.hero-note b{color:var(--ink)}
-  
-  /* ANIMATION LIGHTS DE BOITE DE NUIT (LIGHTSHOW CORNER BACKGROUND) */
-  .club-lights {
-    position: absolute;
-    top: -20px;
-    left: 200px;
-    width: 500px;
-    height: 250px;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.65;
-    mix-blend-mode: screen;
-  }
-  .light-beam {
-    position: absolute;
-    top: 0;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    filter: blur(55px);
-    transform-origin: center;
-    animation: clubSweep 4s ease-in-out infinite alternate;
-  }
-  .light-beam.cyan {
-    background: var(--cyan);
-    left: 10%;
-    animation-delay: 0s;
-  }
-  .light-beam.magenta {
-    background: var(--magenta);
-    left: 45%;
-    animation-delay: -1.5s;
-  }
-  .light-beam.violet {
-    background: var(--violet);
-    left: 75%;
-    animation-delay: -3s;
-  }
-  @keyframes clubSweep {
-    0% { transform: scale(1) translate(-40px, -20px); opacity: 0.4; }
-    50% { transform: scale(1.3) translate(60px, 30px); opacity: 0.9; }
-    100% { transform: scale(0.9) translate(-20px, 50px); opacity: 0.5; }
+
+  /* ANIMATION STYLE "LUMIÈRE DE CLUB / NÉON" SUR LE TEXTE */
+  #dynamic-text {
+    display: inline-block;
   }
 
-  #dynamic-text {
-    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-block;
+  .neon-out {
+    animation: flash-out 0.3s forwards;
+  }
+  .neon-in {
+    animation: flash-in 0.4s forwards;
+  }
+
+  @keyframes flash-out {
+    0% { opacity: 1; filter: blur(0); }
+    100% { opacity: 0; filter: blur(8px); transform: scale(0.95); }
+  }
+
+  @keyframes flash-in {
+    0% { 
+      opacity: 0; 
+      filter: blur(12px) brightness(2); 
+      transform: scale(1.05); 
+      text-shadow: 0 0 30px var(--cyan), 0 0 60px var(--magenta); 
+    }
+    50% { 
+      opacity: 1; 
+      filter: blur(0) brightness(1.5); 
+      text-shadow: 0 0 15px var(--magenta); 
+      transform: scale(1); 
+    }
+    100% { 
+      opacity: 1; 
+      filter: blur(0) brightness(1); 
+      text-shadow: none; 
+    }
   }
 
   /* TRUST BAR */
@@ -223,7 +216,7 @@
   .cal-day.past{opacity:.25;cursor:not-allowed;text-decoration:line-through}
   .cal-day.booked{background:rgba(255,45,142,.12);color:var(--magenta);cursor:not-allowed;border-color:rgba(255,45,142,.28)}
   .cal-day.avail:hover{border-color:var(--cyan)}
-  .cal-day.inrange{background:rgba(35,230,207,.166)}
+  .cal-day.inrange{background:rgba(35,230,207,.16)}
   .cal-day.sel{background:var(--grad);color:#fff;font-weight:800}
   .cal-legend{display:flex;gap:18px;margin-top:14px;font-size:.78rem;color:var(--muted);flex-wrap:wrap}
   .cal-legend span{display:flex;align-items:center;gap:7px}
@@ -400,7 +393,8 @@
 
   @media(max-width:900px){
     .book-grid{grid-template-columns:1fr}.summary{position:static}
-    .contact-grid,.gbiz{grid-template-columns:1fr}.hero h1{max-width:none; height:auto;}
+    .contact-grid,.gbiz{grid-template-columns:1fr}
+    .hero h1{max-width:none;}
     .product{grid-template-columns:1fr;gap:30px}.pimg{aspect-ratio:5/4;max-height:420px}
   }
   @media(max-width:680px){
@@ -409,8 +403,7 @@
     .nav-links a{padding:14px 0;width:100%;border-bottom:1px solid var(--line)}
     .nav-links .btn{margin-top:12px}.burger{display:block}.grid2{grid-template-columns:1fr}
     .sec,.book{padding:56px 0}.form-card{padding:22px}.specs .spec{border-right:none}
-    .hero h1 { font-size: 2.2rem; height: auto; }
-    .club-lights { display: none; }
+    .hero h1 { font-size: 2.2rem; min-height: 3.6em; }
   }
 </style>
 </head>
@@ -434,18 +427,14 @@
 
 <section class="hero" id="top">
   <div class="wrap">
-    <!-- LES PROJECTEURS DE BOITE DE NUIT EN ARRIÈRE-PLAN -->
-    <div class="club-lights" aria-hidden="true">
-      <div class="light-beam cyan"></div>
-      <div class="light-beam magenta"></div>
-      <div class="light-beam violet"></div>
-    </div>
-
     <span class="pill reveal">📍 Paris 17e · au cœur des <b>Batignolles</b></span>
+    
     <h1 class="reveal">
-      <span>Besoin de louer <em class="grad">une enceinte</em> pour</span>
+      Besoin de louer <br>
+      <em class="grad">une enceinte</em> pour <br>
       <span id="dynamic-text" class="grad">votre prochain week-end entre potes</span>
     </h1>
+    
     <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 : 800 Watts de gros son, basses profondes et lumières intégrées, <b style="color:var(--ink)">sans prise de tête</b>.</p>
     <div class="hero-cta reveal">
       <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
@@ -544,7 +533,7 @@
         <div class="bprod"><div class="mini">🔊</div><div><b>PACK SONO ESSENTIEL — JBL PartyBox 720</b><small>800 Watts · lumières intégrées · retrait 53 rue des Batignolles 75017</small></div></div>
 
         <div class="field">
-          <label>1. Choose dates <span class="req">*</span></label>
+          <label>1. Choisissez vos dates <span class="req">*</span></label>
           <div class="cal" id="calendar">
             <div class="cal-head">
               <div class="m" id="calMonth">—</div>
@@ -742,7 +731,7 @@ const OPTIONS = { batteries: { label:"Batteries", prix: 20, parJour: true, dispo
 const GOOGLE_BUSINESS_URL = "https://www.google.com/maps/place/ALLO+SONO/@48.8858359,2.3191904,17z/data=!3m1!4b1!4m6!3m5!1s0x47e66fd831b1c35b:0x3a57d0b9cf8985ef!8m2!3d48.8858359!4d2.3191904!16s%2Fg%2F11z8jms1yq"; /* fiche Google ALLO SONO */
 
 /* ====== PHOTOS DU CARROUSEL ====== */
-/* Ajoute ici les URLs de tes photos (la 1re s'affiche en premier). */
+/* Ajoute ici les URLs de photos (la 1re s'affiche en premier). */
 const PHOTOS = [
   "images/jbl720-1-hero.webp",
   "images/jbl720-2-back.webp",
@@ -1105,14 +1094,20 @@ $("#year").textContent=new Date().getFullYear();
   let index = 0;
 
   setInterval(() => {
-    target.style.opacity = '0';
+    // 1. Extinction (le texte s'efface)
+    target.classList.remove('neon-in');
+    target.classList.add('neon-out');
     
     setTimeout(() => {
+      // 2. On change la phrase en invisible
       index = (index + 1) % phrases.length;
       target.textContent = phrases[index];
-      target.style.opacity = '1';
-    }, 350);
-  }, 3000);
+      
+      // 3. Allumage "flash de club"
+      target.classList.remove('neon-out');
+      target.classList.add('neon-in');
+    }, 300); // Attente de 300ms (durée de flash-out)
+  }, 3500); // Change de phrase toutes les 3.5 secondes
 })();
 </script>
 </body>
