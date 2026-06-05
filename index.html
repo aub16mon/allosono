@@ -915,7 +915,7 @@ const LEGAL = {
     <p>Site hébergé par <b>Netlify, Inc.</b> — 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis — netlify.com.<br>
     Base de données des réservations : <b>Supabase</b>. Paiements : <b>Stripe Payments Europe, Ltd.</b></p>
     <h4>Propriété intellectuelle</h4>
-    <p>L'ensemble des contenus de ce site (textes, visuels, logo) est protégé. Toute reproduction sans autorisation est interdite. Les marques et logos tiers (Google, Stripe, Visa, Mastercard, Apple Pay, Google Pay, JBL) appartiennent à leurs titulaires respectifs.</p>
+    <p>L'ensemble des contenus de ce site (textes, visuels, logo) est protégé. Toute reproduction sans autorisation est interdite. Les marques et logos tiers appartiennent à leurs titulaires respectifs.</p>
     <h4>Données personnelles</h4>
     <p>Le traitement de vos données est décrit dans notre <b>Politique de confidentialité</b>.</p>`,
   cgv:`<h3>Conditions Générales de Vente</h3><p class="maj">Dernière mise à jour : juin 2026 · <span class="todo">Modèle à faire valider — ne constitue pas un conseil juridique.</span></p>
@@ -935,7 +935,7 @@ const LEGAL = {
     <p>Droit français applicable. En cas de litige, le client peut recourir à un médiateur de la consommation : <span class="todo">[médiateur à compléter]</span>.</p>`,
   conf:`<h3>Politique de confidentialité</h3><p class="maj">Dernière mise à jour : juin 2026</p>
     <h4>Responsable de traitement</h4>
-    <p><b>OKULO PRODUCTIONS (ALLO SONO)</b> — 61 rue Chardon-Lagache, 75016 Paris — aubin.simon.pro@gmail.com.</p>
+    <p><b>OKULO PRODUCTIONS (Nom commercial : ALLO SONO)</b> — 61 rue Chardon-Lagache, 75016 Paris — aubin.simon.pro@gmail.com.</p>
     <h4>Données collectées</h4>
     <p>Nom, e-mail, téléphone (WhatsApp), dates de location et message. Les <b>données de paiement</b> (carte) sont traitées directement par Stripe : <b>nous ne les stockons jamais</b>.</p>
     <h4>Finalités & base légale</h4>
@@ -943,11 +943,11 @@ const LEGAL = {
     <h4>Destinataires / sous-traitants</h4>
     <ul><li><b>Stripe</b> — traitement des paiements ;</li><li><b>Supabase</b> — base de données des réservations ;</li><li><b>Netlify</b> — hébergement & formulaire de contact ;</li><li><b>Google Maps</b> — affichage de la carte.</li></ul>
     <h4>Durée de conservation</h4>
-    <p>Données conservées le temps nécessaire à la gestion de la location et aux obligations légales (comptables) : <span class="todo">[durée à préciser]</span>.</p>
+    <p>Données conservées le temps nécessaire à la gestion de la location et aux obligations légales (comptables).</p>
     <h4>Vos droits</h4>
     <p>Conformément au RGPD : accès, rectification, effacement, limitation, opposition et portabilité. Pour les exercer : aubin.simon.pro@gmail.com. Vous pouvez aussi saisir la CNIL (cnil.fr).</p>
     <h4>Cookies</h4>
-    <p>Le site utilise des cookies/services tiers nécessaires à son fonctionnement (Stripe, Google Maps). <span class="todo">[Bandeau cookies à ajouter si dépôt de cookies non essentiels.]</span></p>`
+    <p>Le site utilise des cookies/services tiers nécessaires à son fonctionnement (Stripe, Google Maps).</p>`
 };
 function openLegal(k){ $("#legalContent").innerHTML = LEGAL[k] || ""; const m=$("#legalModal"); m.classList.add('show'); m.scrollTop=0; const c=m.querySelector('.lmodal-card'); if(c) c.scrollTop=0; }
 function closeLegal(){ $("#legalModal").classList.remove('show'); }
