@@ -55,16 +55,19 @@
   .hero .wrap{position:relative;z-index:1}
   .pill{display:inline-block;font-size:.82rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);margin-bottom:22px}
   .pill b{color:var(--cyan)}
+  
   .hero h1 {
     font-family: var(--display);
     font-weight: 900;
-    line-height: 1.04;
     letter-spacing: -1px;
-    font-size: clamp(2.2rem, 5.4vw, 4.2rem);
-    max-width: 32ch; /* Plus de largeur pour les phrases longues */
-    width: fit-content;
+    font-size: 3.4rem; /* Taille fixe et stable */
+    line-height: 1.15;
+    max-width: 760px;
+    height: 3.45em; /* Verrouille la hauteur stricte sur exactement 3 lignes */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     position: relative;
-    padding-right: clamp(45px, 5vw, 65px);
   }
   .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   h2 em,.sub em,.lead em,.grad{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -73,43 +76,52 @@
   .hero-note{color:var(--muted);font-size:.9rem;margin-top:22px;display:flex;gap:20px;flex-wrap:wrap}
   .hero-note span{display:flex;align-items:center;gap:7px}.hero-note b{color:var(--ink)}
   
-  /* ANIMATION EQ INLINE */
-  .eq {
+  /* ANIMATION LIGHTS DE BOITE DE NUIT (LIGHTSHOW CORNER BACKGROUND) */
+  .club-lights {
     position: absolute;
-    right: 0;
-    bottom: 0.1em;
-    height: 1.8em;
-    display: flex;
-    align-items: flex-end;
-    gap: clamp(4px, 1vw, 6px);
-    margin: 0;
+    top: -20px;
+    left: 200px;
+    width: 500px;
+    height: 250px;
     pointer-events: none;
+    z-index: -1;
+    opacity: 0.65;
+    mix-blend-mode: screen;
   }
-  .eq i {
-    width: clamp(6px, 1vw, 10px);
-    border-radius: 8px;
-    background: var(--grad);
-    box-shadow: 0 0 16px rgba(255, 45, 142, .45);
-    animation: eq 1s ease-in-out infinite;
-    height: 25%;
+  .light-beam {
+    position: absolute;
+    top: 0;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    filter: blur(55px);
+    transform-origin: center;
+    animation: clubSweep 4s ease-in-out infinite alternate;
   }
-  .eq i:nth-child(1) { --max-h: 50%; animation-delay: 0s; }
-  .eq i:nth-child(2) { --max-h: 90%; animation-delay: .18s; }
-  .eq i:nth-child(3) { --max-h: 65%; animation-delay: .06s; }
-  .eq i:nth-child(4) { --max-h: 100%; animation-delay: .27s; }
-  .eq i:nth-child(5) { --max-h: 75%; animation-delay: .12s; }
-  .eq i:nth-child(6) { --max-h: 55%; animation-delay: .34s; }
-  .eq i:nth-child(7) { --max-h: 85%; animation-delay: .22s; }
-  @keyframes eq {
-    0%, 100% { height: 25%; }
-    50% { height: var(--max-h); }
+  .light-beam.cyan {
+    background: var(--cyan);
+    left: 10%;
+    animation-delay: 0s;
+  }
+  .light-beam.magenta {
+    background: var(--magenta);
+    left: 45%;
+    animation-delay: -1.5s;
+  }
+  .light-beam.violet {
+    background: var(--violet);
+    left: 75%;
+    animation-delay: -3s;
+  }
+  @keyframes clubSweep {
+    0% { transform: scale(1) translate(-40px, -20px); opacity: 0.4; }
+    50% { transform: scale(1.3) translate(60px, 30px); opacity: 0.9; }
+    100% { transform: scale(0.9) translate(-20px, 50px); opacity: 0.5; }
   }
 
   #dynamic-text {
-    transition: opacity 0.3s ease;
-  }
-  .text-fade {
-    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
   }
 
   /* TRUST BAR */
@@ -388,7 +400,7 @@
 
   @media(max-width:900px){
     .book-grid{grid-template-columns:1fr}.summary{position:static}
-    .contact-grid,.gbiz{grid-template-columns:1fr}.hero h1{max-width:none}
+    .contact-grid,.gbiz{grid-template-columns:1fr}.hero h1{max-width:none; height:auto;}
     .product{grid-template-columns:1fr;gap:30px}.pimg{aspect-ratio:5/4;max-height:420px}
   }
   @media(max-width:680px){
@@ -397,7 +409,8 @@
     .nav-links a{padding:14px 0;width:100%;border-bottom:1px solid var(--line)}
     .nav-links .btn{margin-top:12px}.burger{display:block}.grid2{grid-template-columns:1fr}
     .sec,.book{padding:56px 0}.form-card{padding:22px}.specs .spec{border-right:none}
-    .eq{display:none}
+    .hero h1 { font-size: 2.2rem; height: auto; }
+    .club-lights { display: none; }
   }
 </style>
 </head>
@@ -421,8 +434,18 @@
 
 <section class="hero" id="top">
   <div class="wrap">
+    <!-- LES PROJECTEURS DE BOITE DE NUIT EN ARRIÈRE-PLAN -->
+    <div class="club-lights" aria-hidden="true">
+      <div class="light-beam cyan"></div>
+      <div class="light-beam magenta"></div>
+      <div class="light-beam violet"></div>
+    </div>
+
     <span class="pill reveal">📍 Paris 17e · au cœur des <b>Batignolles</b></span>
-    <h1 class="reveal">Besoin de louer <em class="grad">une enceinte</em> pour <span id="dynamic-text" class="grad">votre prochain week-end entre potes</span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></h1>
+    <h1 class="reveal">
+      <span>Besoin de louer <em class="grad">une enceinte</em> pour</span>
+      <span id="dynamic-text" class="grad">votre prochain week-end entre potes</span>
+    </h1>
     <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 : 800 Watts de gros son, basses profondes et lumières intégrées, <b style="color:var(--ink)">sans prise de tête</b>.</p>
     <div class="hero-cta reveal">
       <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
@@ -521,7 +544,7 @@
         <div class="bprod"><div class="mini">🔊</div><div><b>PACK SONO ESSENTIEL — JBL PartyBox 720</b><small>800 Watts · lumières intégrées · retrait 53 rue des Batignolles 75017</small></div></div>
 
         <div class="field">
-          <label>1. Choisissez vos dates <span class="req">*</span></label>
+          <label>1. Choose dates <span class="req">*</span></label>
           <div class="cal" id="calendar">
             <div class="cal-head">
               <div class="m" id="calMonth">—</div>
@@ -589,7 +612,7 @@
       <p class="sub">Quelques retours de clients après leur location. N'hésitez pas à laisser le vôtre via <em>Google Avis</em> après votre location — ça nous aide grandement !</p></div>
     <div class="tcards reveal">
       <div class="tcard"><div class="stars">★★★★★</div><div class="th">Un son de folie pour mon anniversaire !</div><p>Matériel impeccable et la puissance des basses a bluffé tous les invités. Le son reste hyper net même à fort volume, et l'accueil au retrait était super pro. Je repasserai sans hésiter !</p><div class="who">— Thomas D., Paris 18e</div></div>
-      <div class="tcard"><div class="stars">★★★★★</div><div class="th">Service au top et matériel de qualité !</div><p>Super expérience pour un événement familial. Le rapport qualité/prix est imbattable et la JBL était très facile à connecter en Bluetooth. L'équipe est réactive et arrangeante. Je recommande à 100 % !</p><div class="who">— Marine L., Clichy</div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><div class="th">Service au top et matériel de qualité !</div><p>Super expérience pour un événement familial. Le rapport qualité/prix is imbattable et la JBL était très facile à connecter en Bluetooth. L'équipe est réactive et arrangeante. Je recommande à 100 % !</p><div class="who">— Marine L., Clichy</div></div>
       <div class="tcard"><div class="stars">★★★★★</div><div class="th">Ambiance garantie jusqu'au bout de la nuit !</div><p>Louée pour une soirée entre potes, c'était le feu. Les jeux de lumière intégrés ont direct mis l'ambiance. Prise en main et retour du matériel ultra rapides — foncez les yeux fermés !</p><div class="who">— Nicolas B., Montreuil</div></div>
     </div>
     <div class="greview reveal">
@@ -631,7 +654,7 @@
       <div class="qa reveal"><button>Puis-je brancher un micro ? <span class="pm">+</span></button><div class="a"><p>Oui, l'enceinte dispose de <b>deux entrées XLR</b> (micro, guitare ou console DJ) — parfait pour le karaoké, un discours ou un petit live. Le micro n'est pas inclus pour le moment : écrivez-nous si vous en avez besoin.</p></div></div>
       <div class="qa reveal"><button>Faut-il une prise électrique ? <span class="pm">+</span></button><div class="a"><p>Oui, l'enceinte fonctionne <b>sur secteur</b>. Prévoyez une prise à proximité (intérieur, terrasse, jardin) ; une rallonge suffit la plupart du temps. Pour un lieu sans électricité, des <b>batteries sont disponibles en option</b> (en supplément) — précisez-le à la réservation.</p></div></div>
       <div class="qa reveal"><button>Comment se passe le paiement ? <span class="pm">+</span></button><div class="a"><p>À la réservation, vous payez en ligne par carte (sécurisé Stripe) : soit un <b>acompte de 30 %</b>, soit la <b>totalité</b>. Si vous choisissez l'acompte, le <b>solde</b> se règle au retrait, en <b>espèces</b> ou via un <b>lien de paiement Stripe</b> que nous vous envoyons. Vos dates sont bloquées dès le paiement reçu.</p></div></div>
-      <div class="qa reveal"><button>Comment fonctionne la caution ? <span class="pm">+</span></button><div class="a"><p>Une caution de <b>450€ par chèque</b> (non encaissé) est demandée au retrait, en garantie. Elle vous est <b>rendue au retour</b> de l'enceinte en bon état de fonctionnement.</p></div></div>
+      <div class="qa reveal"><button>Comment fonctionne la caution ? <span class="pm">+</span></button><div class="a"><p>Une caution de <b>450€ par chèque</b> (non encaissé) is demandée au retrait, en garantie. Elle vous est <b>rendue au retour</b> de l'enceinte en bon état de fonctionnement.</p></div></div>
       <div class="qa reveal"><button>Quelle est la durée d'une location ? <span class="pm">+</span></button><div class="a"><p>La location se fait <b>à la journée</b> (65€/jour). Le retrait et le retour s'effectuent pendant nos horaires d'ouverture, aux dates que vous choisissez dans le calendrier.</p></div></div>
       <div class="qa reveal"><button>Je suis pressé, puis-je réserver en urgence ? <span class="pm">+</span></button><div class="a"><p>Si la date est libre dans le calendrier, oui ! Pour une demande de dernière minute, le plus rapide est de nous écrire directement sur <b>WhatsApp au 06 69 11 10 52</b>.</p></div></div>
       <div class="qa reveal"><button>Et en cas de casse ou de dommage ? <span class="pm">+</span></button><div class="a"><p>La caution sert précisément à couvrir un éventuel dommage. En cas de souci, on en discute ensemble et on évalue les frais réels — mais dans l'immense majorité des cas, tout se passe sans accroc.</p></div></div>
@@ -1088,7 +1111,7 @@ $("#year").textContent=new Date().getFullYear();
       index = (index + 1) % phrases.length;
       target.textContent = phrases[index];
       target.style.opacity = '1';
-    }, 300);
+    }, 350);
   }, 3000);
 })();
 </script>
