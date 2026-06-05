@@ -74,14 +74,14 @@
   /* ANIMATION EQ INLINE */
   .eq {
     display: inline-flex;
-  align-items: flex-end;
-  height: 1.5em; /* Force les barres à déborder sur la ligne du haut */
-  margin-left: 12px; /* Espace juste après le point d'interrogation */
-  vertical-align: baseline; /* Ancre la base au même niveau que le texte */
-  transform: translateY(0.15em); /* Ajustement visuel infime pour être pile sur la ligne du bas */
-  gap: clamp(4px, 1vw, 6px);
-  pointer-events: none;
-}
+    align-items: flex-end;
+    height: 1.1em; /* Hauteur parfaite par rapport au texte */
+    margin-left: 14px;
+    vertical-align: text-bottom; /* LA solution : s'aligne sur le bas des lettres, pas de l'animation */
+    gap: clamp(4px, 1vw, 6px);
+    pointer-events: none;
+    transform: translateY(0.05em); /* Micro-ajustement visuel pour être parfait */
+  }
   .eq i {
     width: clamp(6px, 1vw, 10px);
     border-radius: 8px;
