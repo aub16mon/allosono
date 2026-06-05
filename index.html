@@ -55,7 +55,14 @@
   .hero .wrap{position:relative;z-index:1}
   .pill{display:inline-block;font-size:.82rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);margin-bottom:22px}
   .pill b{color:var(--cyan)}
-  .hero h1{font-family:var(--display);font-weight:900;line-height:1.04;letter-spacing:-1px;font-size:clamp(2.2rem,5.4vw,4.2rem);max-width:18ch}
+  ..hero h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -1px;
+  font-size: clamp(2.2rem, 5.4vw, 4.2rem);
+  max-width: 26ch; /* Élargi pour laisser respirer l'animation */
+}
   .hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   h2 em,.sub em,.lead em,.grad{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:22px 0 32px}
@@ -404,7 +411,7 @@
 <section class="hero" id="top">
   <div class="wrap">
     <span class="pill reveal">📍 Paris 17e · au cœur des <b>Batignolles</b></span>
-    <h1 class="reveal">Besoin de louer <em>une enceinte</em> qui tient la piste ? <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></h1>
+    <h1 class="reveal">Besoin de louer <em>une enceinte</em> qui tient la <span style="white-space: nowrap;">piste ? <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span></h1>
     <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 : 800 Watts de gros son, basses profondes et lumières intégrées, <b style="color:var(--ink)">sans prise de tête</b>.</p>
     <div class="hero-cta reveal">
       <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
