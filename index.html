@@ -1030,20 +1030,33 @@ async function validatePromo(code) {
   code = code.trim().toUpperCase();
   if (!code) { promoValid=null; if(status) status.textContent=''; if(msg) msg.style.display='none'; render(); return; }
   if (code.length < 5) return;
+  const email = $("#email")?.value?.trim().toLowerCase();
+  if (!email) {
+    promoValid=null;
+    if(status){ status.textContent='✉'; status.style.color='var(--muted)'; }
+    if(msg){ msg.textContent='Renseignez votre e-mail ci-dessus pour valider le code.'; msg.style.color='var(--muted)'; msg.style.display='block'; }
+    render(); return;
+  }
   if(status){ status.textContent='…'; status.style.color='var(--muted)'; }
   if (!sb) return;
-  const email = $("#email")?.value?.trim().toLowerCase();
-  const { data, error } = await sb.from('promo_codes').select('discount,owner_email,uses_left').eq('code', code).single();
-  if (error || !data || data.uses_left < 1) {
+  const { data, error } = await sb.rpc('check_promo', { p_code: code, p_email: email });
+  const r = Array.isArray(data) ? data[0] : data;
+  if (error || !r) {
     promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
-    if(msg){ msg.textContent='Code invalide ou déjà utilisé.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
-  } else if (email && data.owner_email === email) {
-    promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
-    if(msg){ msg.textContent='Vous ne pouvez pas utiliser votre propre code de parrainage.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
-  } else {
-    promoValid={ code, discount: data.discount };
+    if(msg){ msg.textContent='Impossible de vérifier le code, réessayez.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
+  } else if (r.valid) {
+    promoValid={ code, discount: r.discount };
     if(status){ status.textContent='✓'; status.style.color='var(--cyan)'; }
-    if(msg){ msg.textContent=`Super ! ${data.discount}€ de réduction appliqués 🎉`; msg.style.color='var(--cyan)'; msg.style.display='block'; }
+    if(msg){ msg.textContent=`Super ! ${r.discount}€ de réduction appliqués 🎉`; msg.style.color='var(--cyan)'; msg.style.display='block'; }
+  } else {
+    promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
+    const reasons = {
+      vide:'Code vide.', inconnu:'Code inconnu.', epuise:'Ce code a déjà été utilisé au maximum.',
+      email_requis:'Renseignez votre e-mail pour valider le code.',
+      limite_vie:'Vous avez déjà utilisé le maximum de 2 codes de réduction.',
+      deja_utilise:'Vous avez déjà utilisé ce code.'
+    };
+    if(msg){ msg.textContent=reasons[r.reason]||'Code invalide.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
   }
   render();
 }
@@ -1053,6 +1066,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if(pi) pi.addEventListener('input', e=>{
     clearTimeout(promoTimer);
     promoTimer = setTimeout(()=>validatePromo(e.target.value), 600);
+  });
+  // Re-valide le code si l'e-mail change (la validité dépend de l'e-mail)
+  const ei = $("#email");
+  if(ei) ei.addEventListener('input', ()=>{
+    const code = pi?.value?.trim();
+    if(code && code.length>=5){ clearTimeout(promoTimer); promoTimer=setTimeout(()=>validatePromo(code), 600); }
   });
 });
 
@@ -1190,6 +1209,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
     message:msg||null, total, caution:PRODUCT.caution, status:'pending',
     options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0,
       batteries_cout: bat, tarif_label: pricing.label, jours: days,
+      base_total: pricing.total + bat,
       promo_code: promoValid?.code||null, promo_discount: promoDisco } };
 
   if(sb){
