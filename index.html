@@ -881,7 +881,7 @@
   <div id="modalStep1">
     <div class="check" style="background:rgba(138,75,255,.3);box-shadow:none;font-size:1.5rem">📋</div>
     <h3>Vérifiez votre réservation</h3>
-    <p>Vous allez être redirigé vers notre page de paiement sécurisé. Vos dates seront <b style="color:var(--ink)">bloquées automatiquement</b> dès réception du paiement.</p>
+    <p>Vérifiez le récapitulatif ci-dessous. En confirmant, votre demande s'ouvre dans <b style="color:var(--ink)">WhatsApp</b> — on vous répond rapidement pour bloquer vos dates et organiser le paiement.</p>
     <div class="ref" id="refNum">—</div>
     <div id="modalDetails" style="font-size:.9rem;color:var(--muted);margin:-8px 0 20px;line-height:1.8"></div>
     <button class="btn btn-primary" id="confirmBtn" style="width:100%;justify-content:center">Confirmer et payer →</button>
@@ -889,7 +889,7 @@
     <button class="x" id="cancelModal" style="margin-top:14px">Annuler</button>
   </div>
 
-  <!-- ÉTAPE 2 : succès après retour Stripe -->
+  <!-- ÉTAPE 2 : écran de confirmation (réservé pour usage ultérieur) -->
   <div id="modalStep2" style="display:none">
     <div class="check">✓</div>
     <h3>Réservation confirmée !</h3>
@@ -926,7 +926,6 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* ====== CONFIG (modifiable) ====== */
@@ -988,32 +987,18 @@ function montantAPayer(total, choice){
   if(choice==='total') return total;
   return Math.round(total * ACOMPTE_PERCENT / 100);
 }
-let lastBooking=null;
 
 /* ====== CODE PROMO ====== */
 let promoValid = null; // { code, discount } ou null
 let promoTimer = null;
 
 async function validatePromo(code) {
-  const el = $("#promoCode"), status = $("#promoStatus"), msg = $("#promoMsg");
-  code = code.trim().toUpperCase();
-  if (!code) { promoValid=null; status.textContent=''; msg.style.display='none'; render(); return; }
-  if (code.length < 5) return;
-  status.textContent='…'; status.style.color='var(--muted)';
-  if (!sb) return;
-  const email = $("#email")?.value?.trim().toLowerCase();
-  const { data, error } = await sb.from('promo_codes').select('discount,owner_email,uses_left').eq('code', code).single();
-  if (error || !data || data.uses_left < 1) {
-    promoValid=null; status.textContent='✗'; status.style.color='var(--magenta)';
-    msg.textContent='Code invalide ou déjà utilisé.'; msg.style.color='var(--magenta)'; msg.style.display='block';
-  } else if (email && data.owner_email === email) {
-    promoValid=null; status.textContent='✗'; status.style.color='var(--magenta)';
-    msg.textContent='Vous ne pouvez pas utiliser votre propre code de parrainage.'; msg.style.color='var(--magenta)'; msg.style.display='block';
-  } else {
-    promoValid={ code, discount: data.discount };
-    status.textContent='✓'; status.style.color='var(--cyan)';
-    msg.textContent=`Super ! ${data.discount}€ de réduction appliqués 🎉`; msg.style.color='var(--cyan)'; msg.style.display='block';
-  }
+  // Validation des codes de parrainage désactivée (nécessitait un backend).
+  // Le champ reste affiché ; aucune réduction n'est appliquée côté front.
+  const status = $("#promoStatus"), msg = $("#promoMsg");
+  promoValid = null;
+  if (status) status.textContent = '';
+  if (msg) msg.style.display = 'none';
   render();
 }
 
@@ -1024,12 +1009,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     promoTimer = setTimeout(()=>validatePromo(e.target.value), 600);
   });
 });
-
-/* ====== SUPABASE (clés publiques) ====== */
-const SUPABASE_URL = "https://kmlbxkmbtxoazpnozebx.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttbGJ4a21idHhvYXpwbm96ZWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDg4NTUsImV4cCI6MjA5NjE4NDg1NX0.bUadmRwPpzzRMDG-b3GCNpwxIj_9DBwiVFaN9el21bI";
-let sb=null;
-try{ sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){ console.error("Supabase init:",e); }
 
 /* ====== UTILS ====== */
 const $ = s => document.querySelector(s);
@@ -1050,14 +1029,9 @@ let view=new Date(); view.setDate(1);
 const todayStr=ymd(new Date());
 
 /* ====== DATA ====== */
-async function loadBusy(){
-  if(!sb) return [];
-  try{
-    const { data, error } = await sb.rpc('busy_periods');
-    if(error) throw error;
-    return (data||[]).map(r=>({start:r.start_date,end:r.end_date,status:r.status}));
-  }catch(e){ console.error("Lecture dispos:",e); return []; }
-}
+// Front seul : pas de backend de disponibilités. Toutes les dates futures
+// apparaissent comme disponibles. (À rebrancher plus tard sur une vraie source.)
+async function loadBusy(){ return []; }
 function buildUnavailable(){
   unavailable=new Set();
   periods.filter(p=>p.status!=='pending').forEach(p=>{ let d=p.start; while(parse(d)<=parse(p.end)){ unavailable.add(d); d=addDays(d,1);} });
@@ -1133,18 +1107,11 @@ function render(){
   const so=$("#sOnline"); if(so) so.textContent=days?eur(online):"—";
 }
 
-/* ====== NOTIFICATION (désactivée — utiliser Make.com ou équivalent) ====== */
-function envoyerNotif(f){ return Promise.resolve(); }
-
 /* ====== SOUMISSION ====== */
-$("#submitBtn").addEventListener('click', async ()=>{
+$("#submitBtn").addEventListener('click', ()=>{
   const name=$("#name").value.trim(),email=$("#email").value.trim(),phone=$("#phone").value.trim();
   if(!(selStart&&selEnd&&name&&(email||phone))){ $("#formErr").style.display='block'; return; }
   $("#formErr").style.display='none';
-  const btn=$("#submitBtn"); btn.disabled=true; const old=btn.textContent; btn.textContent="Enregistrement…";
-
-  periods=await loadBusy(); buildUnavailable(); renderCalendar();
-  if(rangeHasConflict(selStart,selEnd)){ flash("Désolé, ces dates viennent d'être prises. Choisissez d'autres dates."); btn.disabled=false; btn.textContent=old; return; }
 
   const days=daysInclusive(selStart,selEnd);
   const pricing=getPrice(days);
@@ -1152,62 +1119,32 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const total=pricing.total + bat;
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
-  const choice=getPayChoice();                 
-  const soldeMode=(choice==='acompte')?getSoldeMode():null;
+  const choice=getPayChoice();
   const aPayer=montantAPayer(total,choice);
 
-  const row={ ref, start_date:selStart, end_date:selEnd, name, email:email||null, phone:phone||null,
-    message:msg||null, total, caution:PRODUCT.caution, status:'pending',
-    options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0, batteries_cout: bat, tarif_label: pricing.label, jours: days } };
+  // Message pré-rempli envoyé sur WhatsApp pour finaliser la réservation
+  const msgTxt=`Bonjour, je souhaite réserver la JBL PartyBox 720 (réf. ${ref}) du ${fr(selStart)} au ${fr(selEnd)} — ${days} jour${days>1?'s':''}.`
+    +` Montant : ${eur(total)}${choice==='acompte'?' (acompte '+eur(aPayer)+')':''}.`
+    +` Nom : ${name}${phone?' · tél : '+phone:''}${email?' · email : '+email:''}.`
+    +(msg?` Précision : ${msg}.`:'')
+    +` Merci de me confirmer la disponibilité !`;
+  const waUrl=`https://wa.me/33669111052?text=${encodeURIComponent(msgTxt)}`;
 
-  if(sb){
-    const { error } = await sb.from('bookings').insert(row);
-    if(error){ console.error("Insert:",error); flash("Une erreur est survenue. Réessayez ou contactez-nous."); btn.disabled=false; btn.textContent=old; return; }
-  }
-
-
-  // Préparer les données pour la modal
+  // Récapitulatif dans la modale
   const soldeLabel = choice==='acompte' ? ` · solde <b style="color:var(--ink)">${eur(total-aPayer)}</b> au retrait` : '';
-  const msgTxt=`Bonjour, je viens de confirmer une réservation (réf. ${ref}) pour la JBL PartyBox 720 du ${fr(selStart)} au ${fr(selEnd)}. Montant : ${eur(total)}${choice==='acompte'?' (acompte '+eur(aPayer)+')':''}. Merci de me contacter pour le paiement !`;
-
   $("#refNum").textContent=ref;
   const detailsEl=$("#modalDetails");
   if(detailsEl) detailsEl.innerHTML=`📅 ${fr(selStart)} → ${fr(selEnd)}<br>💰 <b style="color:var(--ink)">${eur(total)}</b> · ${pricing.label}${soldeLabel}`;
 
-  // Bouton confirmer
+  // Bouton confirmer → ouvre WhatsApp
   const confirmBtn=$("#confirmBtn");
-  const datesStr=`${fr(selStart)} → ${fr(selEnd)}`;
+  confirmBtn.textContent='Confirmer sur WhatsApp →';
+  confirmBtn.onclick=()=>{ window.open(waUrl,'_blank','noopener'); };
 
-  confirmBtn.onclick=async()=>{
-    confirmBtn.disabled=true; confirmBtn.textContent='Redirection vers le paiement…';
-    try{
-      const res=await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
-        body:JSON.stringify({ ref, total, choice, email:email||null, name,
-          dates:datesStr, tarifLabel:pricing.label,
-          promoCode: promoValid?.code||null, promoDiscount: promoValid?.discount||0 })
-      });
-      const data=await res.json();
-      if(data.url) window.location.href=data.url;
-      else throw new Error('No URL');
-    }catch(e){
-      $("#confirmErr").style.display='block';
-      confirmBtn.disabled=false; confirmBtn.textContent='Confirmer et payer →';
-    }
-  };
-
-  lastBooking={ ref, email:email||null, total, choice };
+  $("#confirmErr").style.display='none';
   $("#modalStep1").style.display='block';
   $("#modalStep2").style.display='none';
   $("#modal").classList.add('show');
-
-  periods=await loadBusy(); buildUnavailable();
-  selStart=null;selEnd=null;phase=0;
-  $("#name").value='';$("#email").value='';$("#phone").value='';$("#message").value='';
-  if($("#optBat")) $("#optBat").checked=false;
-  updateSel(); renderCalendar();
-  btn.disabled=false; btn.textContent=old;
 });
 const closeModal=()=>$("#modal").classList.remove('show');
 $("#closeModal").addEventListener('click',closeModal);
@@ -1267,8 +1204,7 @@ const LEGAL = {
     <h4>Finalités du traitement</h4>
     <ul><li>Gestion des réservations et des paiements</li><li>Envoi de la confirmation de réservation</li><li>Suivi de la relation client</li><li>Obligations légales et comptables</li></ul>
     <h4>Sous-traitants</h4>
-    <p><b>Stripe</b> (paiement) : les données bancaires sont traitées exclusivement par Stripe et ne transitent jamais par nos serveurs. Stripe est certifié PCI-DSS.<br>
-    <b>Supabase</b> (base de données) : les données de réservation sont stockées dans une base sécurisée hébergée en Europe.<br>
+    <p><b>WhatsApp</b> (Meta) : les demandes de réservation envoyées via le bouton de confirmation transitent par WhatsApp pour nous permettre de vous recontacter.<br>
     <b>GitHub Pages</b> (hébergement du site) : aucune donnée personnelle n'est transmise à GitHub dans le cadre de la navigation.</p>
     <h4>Durée de conservation</h4>
     <p>Les données sont conservées 3 ans à compter de la dernière réservation, conformément aux obligations comptables et fiscales françaises.</p>
@@ -1332,18 +1268,6 @@ $("#year").textContent=new Date().getFullYear();
   renderDow(); render();
   periods=await loadBusy(); buildUnavailable();
   selStart=null;selEnd=null; updateSel(); renderCalendar();
-
-  // Retour depuis Stripe
-  const paye=new URLSearchParams(location.search).get('paye');
-  if(paye){
-    $("#refNumOk").textContent=paye;
-    $("#modalStep1").style.display='none';
-    $("#modalStep2").style.display='block';
-    $("#modal").classList.add('show');
-    periods=await loadBusy(); buildUnavailable(); renderCalendar();
-    history.replaceState({},'',location.pathname);
-  }
-
 })();
 
 /* ====== ANIMATION TEXTE DYNAMIQUE H1 ====== */
