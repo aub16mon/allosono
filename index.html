@@ -1030,16 +1030,17 @@ async function validatePromo(code) {
   code = code.trim().toUpperCase();
   if (!code) { promoValid=null; if(status) status.textContent=''; if(msg) msg.style.display='none'; render(); return; }
   if (code.length < 5) return;
-  const email = $("#email")?.value?.trim().toLowerCase();
-  if (!email) {
+  const email = $("#email")?.value?.trim().toLowerCase() || '';
+  const phone = $("#phone")?.value?.trim() || '';
+  if (!email && !phone) {
     promoValid=null;
     if(status){ status.textContent='✉'; status.style.color='var(--muted)'; }
-    if(msg){ msg.textContent='Renseignez votre e-mail ci-dessus pour valider le code.'; msg.style.color='var(--muted)'; msg.style.display='block'; }
+    if(msg){ msg.textContent='Renseignez votre e-mail ou téléphone ci-dessus pour valider le code.'; msg.style.color='var(--muted)'; msg.style.display='block'; }
     render(); return;
   }
   if(status){ status.textContent='…'; status.style.color='var(--muted)'; }
   if (!sb) return;
-  const { data, error } = await sb.rpc('check_promo', { p_code: code, p_email: email });
+  const { data, error } = await sb.rpc('check_promo', { p_code: code, p_email: email, p_phone: phone });
   const r = Array.isArray(data) ? data[0] : data;
   if (error || !r) {
     promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
@@ -1052,8 +1053,8 @@ async function validatePromo(code) {
     promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
     const reasons = {
       vide:'Code vide.', inconnu:'Code inconnu.', epuise:'Ce code a déjà été utilisé au maximum.',
-      email_requis:'Renseignez votre e-mail pour valider le code.',
-      limite_vie:'Vous avez déjà utilisé le maximum de 2 codes de réduction.',
+      contact_requis:'Renseignez votre e-mail ou téléphone pour valider le code.',
+      limite_vie:'Vous avez déjà utilisé un code de réduction (limité à 1 par personne).',
       deja_utilise:'Vous avez déjà utilisé ce code.'
     };
     if(msg){ msg.textContent=reasons[r.reason]||'Code invalide.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
@@ -1067,12 +1068,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     clearTimeout(promoTimer);
     promoTimer = setTimeout(()=>validatePromo(e.target.value), 600);
   });
-  // Re-valide le code si l'e-mail change (la validité dépend de l'e-mail)
-  const ei = $("#email");
-  if(ei) ei.addEventListener('input', ()=>{
+  // Re-valide le code si l'e-mail ou le téléphone change (la validité en dépend)
+  const revalidate = ()=>{
     const code = pi?.value?.trim();
     if(code && code.length>=5){ clearTimeout(promoTimer); promoTimer=setTimeout(()=>validatePromo(code), 600); }
-  });
+  };
+  $("#email")?.addEventListener('input', revalidate);
+  $("#phone")?.addEventListener('input', revalidate);
 });
 
 /* ====== SUPABASE (clés publiques) ====== */
