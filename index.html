@@ -1176,6 +1176,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
 
   // Bouton confirmer
   const confirmBtn=$("#confirmBtn");
+  const datesStr=`${fr(selStart)} → ${fr(selEnd)}`;
 
   confirmBtn.onclick=async()=>{
     confirmBtn.disabled=true; confirmBtn.textContent='Redirection vers le paiement…';
@@ -1184,7 +1185,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
         body:JSON.stringify({ ref, total, choice, email:email||null, name,
-          dates:`${fr(selStart)} → ${fr(selEnd)}`, tarifLabel:pricing.label,
+          dates:datesStr, tarifLabel:pricing.label,
           promoCode: promoValid?.code||null, promoDiscount: promoValid?.discount||0 })
       });
       const data=await res.json();
