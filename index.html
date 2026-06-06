@@ -1141,7 +1141,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const name=$("#name").value.trim(),email=$("#email").value.trim(),phone=$("#phone").value.trim();
   if(!(selStart&&selEnd&&name&&(email||phone))){ $("#formErr").style.display='block'; return; }
   $("#formErr").style.display='none';
-  const btn=$("#submitBtn"); btn.disabled=true; const old=btn.textContent; btn.textContent="Enregistrement…";
+  const btn=$("#submitBtn"); btn.disabled=true; const old=btn.textContent; btn.textContent="Vérification…";
 
   periods=await loadBusy(); buildUnavailable(); renderCalendar();
   if(rangeHasConflict(selStart,selEnd)){ flash("Désolé, ces dates viennent d'être prises. Choisissez d'autres dates."); btn.disabled=false; btn.textContent=old; return; }
@@ -1152,46 +1152,40 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const total=pricing.total + bat;
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
-  const choice=getPayChoice();                 
-  const soldeMode=(choice==='acompte')?getSoldeMode():null;
+  const choice=getPayChoice();
   const aPayer=montantAPayer(total,choice);
 
-  const row={ ref, start_date:selStart, end_date:selEnd, name, email:email||null, phone:phone||null,
-    message:msg||null, total, caution:PRODUCT.caution, status:'pending',
-    options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0, batteries_cout: bat, tarif_label: pricing.label, jours: days } };
-
-  if(sb){
-    const { error } = await sb.from('bookings').insert(row);
-    if(error){ console.error("Insert:",error); flash("Une erreur est survenue. Réessayez ou contactez-nous."); btn.disabled=false; btn.textContent=old; return; }
-  }
-
-
-  // Préparer les données pour la modal
-  const soldeLabel = choice==='acompte' ? ` · solde <b style="color:var(--ink)">${eur(total-aPayer)}</b> au retrait` : '';
-  const msgTxt=`Bonjour, je viens de confirmer une réservation (réf. ${ref}) pour la JBL PartyBox 720 du ${fr(selStart)} au ${fr(selEnd)}. Montant : ${eur(total)}${choice==='acompte'?' (acompte '+eur(aPayer)+')':''}. Merci de me contacter pour le paiement !`;
-
-  $("#refNum").textContent=ref;
-  const detailsEl=$("#modalDetails");
-  if(detailsEl) detailsEl.innerHTML=`📅 ${fr(selStart)} → ${fr(selEnd)}<br>💰 <b style="color:var(--ink)">${eur(total)}</b> · ${pricing.label}${soldeLabel}`;
-
-  // Bouton confirmer
-  const confirmBtn=$("#confirmBtn");
+  // Capturer les dates AVANT qu'elles soient effacées après affichage de la modal
+  const startDate=selStart, endDate=selEnd;
   const datesStr=`${fr(selStart)} → ${fr(selEnd)}`;
 
+  // Préparer la modal
+  const soldeLabel = choice==='acompte' ? ` · solde <b style="color:var(--ink)">${eur(total-aPayer)}</b> au retrait` : '';
+  $("#refNum").textContent=ref;
+  const detailsEl=$("#modalDetails");
+  if(detailsEl) detailsEl.innerHTML=`📅 ${datesStr}<br>💰 <b style="color:var(--ink)">${eur(total)}</b> · ${pricing.label}${soldeLabel}`;
+
+  // Bouton confirmer : crée la réservation EN DB + session Stripe en une seule étape
+  const confirmBtn=$("#confirmBtn");
   confirmBtn.onclick=async()=>{
-    confirmBtn.disabled=true; confirmBtn.textContent='Redirection vers le paiement…';
+    confirmBtn.disabled=true; confirmBtn.textContent='Création de la réservation…';
     try{
       const res=await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`,{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
-        body:JSON.stringify({ ref, total, choice, email:email||null, name,
-          dates:datesStr, tarifLabel:pricing.label,
-          promoCode: promoValid?.code||null, promoDiscount: promoValid?.discount||0 })
+        body:JSON.stringify({
+          ref, name, email:email||null, phone:phone||null, message:msg||null,
+          startDate, endDate,
+          total, choice, tarifLabel:pricing.label,
+          promoCode:promoValid?.code||null, promoDiscount:promoValid?.discount||0,
+          batteries:bat>0, batteriesCost:bat
+        })
       });
       const data=await res.json();
       if(data.url) window.location.href=data.url;
-      else throw new Error('No URL');
+      else throw new Error(data.error||'Pas d'URL de paiement reçue');
     }catch(e){
+      console.error('Checkout error:',e);
       $("#confirmErr").style.display='block';
       confirmBtn.disabled=false; confirmBtn.textContent='Confirmer et payer →';
     }
