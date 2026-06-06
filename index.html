@@ -243,9 +243,11 @@
   .pprice .per{color:var(--muted);font-weight:600}
   .pprice .cau{color:var(--amber);font-size:.86rem;font-weight:600}
   .pinfo .btn{margin-top:18px}
-  .specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:44px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(22,16,42,.4)}
+  .specs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:44px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(22,16,42,.4)}
   .spec{padding:22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .spec:last-child{border-bottom:none;border-right:none}
+  .spec:nth-child(4n){border-right:none}
+  .spec:nth-last-child(-n+4){border-bottom:none}
+  @media(max-width:680px){.specs{grid-template-columns:repeat(2,1fr)}.spec:nth-child(4n){border-right:1px solid var(--line)}.spec:nth-child(2n){border-right:none}.spec:nth-last-child(-n+4){border-bottom:1px solid var(--line)}.spec:nth-last-child(-n+2){border-bottom:none}}
   .spec .l{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
   .spec .v{font-family:var(--display);font-weight:600;font-size:1.05rem}
 
@@ -339,8 +341,8 @@
   .po input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
   
   /* Solde : pilules toggles */
-  .soldebox{border:1px solid var(--line);border-radius:16px;padding:14px 15px;background:rgba(255,255,255,.02);overflow:hidden;transition:max-height .3s ease,opacity .3s ease,padding .3s ease}
-  .soldebox.hidden{max-height:0!important;opacity:0;padding-top:0;padding-bottom:0;border-color:transparent}
+  .soldebox{border:1px solid var(--line);border-radius:16px;padding:14px 15px;background:rgba(255,255,255,.02)}
+  .soldebox[hidden]{display:none}
   .soldebox .sl{font-size:.85rem;color:var(--muted);margin-bottom:10px}
   .po2row{display:flex;gap:10px;flex-wrap:wrap}
   .po2{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;font-size:.88rem;font-weight:600;transition:border-color .18s,background .18s,color .18s}
@@ -376,6 +378,14 @@
   .err{color:var(--magenta);font-size:.85rem;margin-top:10px;display:none}
 
   /* GOOGLE / AVIS */
+  /* PRESS BAND */
+  .press{padding:48px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.015)}
+  .press-label{text-align:center;font-size:.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
+  .press-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 6px}
+  .press-logo{padding:9px 20px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-weight:700;font-size:.88rem;letter-spacing:.3px;transition:border-color .2s,color .2s,background .2s;white-space:nowrap}
+  .press-logo:hover{border-color:rgba(255,255,255,.22);color:var(--ink);background:rgba(255,255,255,.06)}
+  .press-logo span{opacity:.55;font-weight:400;font-size:.78rem;margin-left:4px}
+
   .tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:46px}
   .tcard{border:1px solid var(--line);border-radius:20px;padding:24px;background:linear-gradient(160deg,var(--panel),rgba(22,16,42,.4))}
   .tcard .stars{color:var(--amber);letter-spacing:2px;margin-bottom:10px;font-size:1.05rem}
@@ -699,7 +709,7 @@
           <div class="po-title">Comment souhaitez-vous régler ?</div>
           <label class="po"><input type="radio" name="payChoice" value="acompte"><span><b>Acompte 30 %</b> en ligne maintenant<small>Le solde se règle au retrait</small></span></label>
           <label class="po"><input type="radio" name="payChoice" value="total" checked><span><b>Payer la totalité</b> en ligne maintenant<small>Plus rien à régler au retrait (hors caution)</small></span></label>
-          <div class="soldebox hidden" id="soldeBox" style="max-height:0">
+          <div class="soldebox" id="soldeBox" hidden>
             <div class="sl">Le solde, au retrait, je le règle :</div>
             <div class="po2row">
               <label class="po2"><input type="radio" name="soldeMode" value="Espèces" checked><span>En espèces</span></label>
@@ -717,6 +727,7 @@
   </div>
 </section>
 
+
 <section class="sec" id="avis" style="padding-top:30px">
   <div class="wrap">
     <div class="reveal"><div class="kicker">Avis & recommandations</div><h2>Ils nous font <span class="grad">confiance</span>.</h2>
@@ -725,9 +736,6 @@
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Un son de folie pour mon anniversaire !</div><p>Matériel impeccable et la puissance des basses a bluffé tous les invités. Le son reste hyper net même à fort volume, et l'accueil au retrait était super pro. Je repasserai sans hésiter !</p><div class="who">— Thomas D., Paris 18e</div></div>
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Service au top et matériel de qualité !</div><p>Super expérience pour un événement familial. Le rapport qualité/prix est imbattable et la JBL était très facile à connecter en Bluetooth. L'équipe est réactive et arrangeante. Je recommande à 100 % !</p><div class="who">— Marine L., Clichy</div></div>
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Ambiance garantie jusqu'au bout de la nuit !</div><p>Louée pour une soirée entre potes, c'était le feu. Les jeux de lumière intégrés ont direct mis l'ambiance. Prise en main et retour du matériel ultra rapides — foncez les yeux fermés !</p><div class="who">— Nicolas B., Montreuil</div></div>
-      <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Parfait pour notre vin d'honneur !</div><p>Le son était impeccable et les lumières ont fait l'effet. Très simple à brancher, même pour des novices. Tout le monde a été bluffé par la qualité du son pour une enceinte de location.</p><div class="who">— Sophie M., Paris 17e</div></div>
-      <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Réactif, pro et matériel au top !</div><p>Location pour un anniversaire surprise, tout s'est passé à merveille. Aubin est très disponible et arrangeant. La sono a cartonné toute la soirée. Je recommande sans hésiter !</p><div class="who">— Julien R., Levallois</div></div>
-      <div class="tcard"><div class="stars" aria-label="4 étoiles sur 5">★★★★☆</div><div class="th">Très bon matériel, prévoir de l'aide pour le transport</div><p>Super enceinte, son vraiment puissant et les lumières sont canon. Seul bémol : c'est lourd à transporter (31 kg !), prévoyez de l'aide. Mais le service est nickel, je recommande.</p><div class="who">— Camille T., Neuilly</div></div>
       <div class="tcard"><div class="stars" aria-label="4 étoiles sur 5">★★★★☆</div><div class="th">Bonne expérience globale</div><p>Matériel en parfait état et très facile à utiliser. Les horaires de retrait sont un peu limités en semaine mais on s'arrange facilement par WhatsApp. Rapport qualité/prix excellent.</p><div class="who">— Marc V., Paris 9e</div></div>
     </div>
     <div class="parrain reveal" style="margin-top:30px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;border:1px solid rgba(255,207,74,.25);border-radius:18px;padding:22px 28px;background:rgba(255,207,74,.05)">
@@ -1077,7 +1085,7 @@ function render(){
   const badge=$("#sBadge");
   if(badge){ if(pricing.badge){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
   const choice=getPayChoice();
-  const sBox=$("#soldeBox"); if(sBox){ sBox.style.maxHeight=(choice==='acompte')?sBox.scrollHeight+'px':'0'; sBox.classList.toggle('hidden',choice!=='acompte'); }
+  const sBox=$("#soldeBox"); if(sBox) sBox.hidden=(choice!=='acompte');
   const online=days?montantAPayer(total,choice):0;
   const so=$("#sOnline"); if(so) so.textContent=days?eur(online):"—";
 }
