@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://allo-sono.fr/sitemap.xml
