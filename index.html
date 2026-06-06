@@ -913,7 +913,7 @@
   <div id="modalStep1">
     <div class="check" style="background:rgba(138,75,255,.3);box-shadow:none;font-size:1.5rem">📋</div>
     <h3>Vérifiez votre réservation</h3>
-    <p>Vérifiez le récapitulatif ci-dessous. En confirmant, votre demande s'ouvre dans <b style="color:var(--ink)">WhatsApp</b> — on vous répond rapidement pour bloquer vos dates et organiser le paiement.</p>
+    <p>Vous allez être redirigé vers notre page de paiement sécurisé <b style="color:var(--ink)">Stripe</b>. Vos dates seront <b style="color:var(--ink)">bloquées automatiquement</b> dès réception du paiement.</p>
     <div class="ref" id="refNum">—</div>
     <div id="modalDetails" style="font-size:.9rem;color:var(--muted);margin:-8px 0 20px;line-height:1.8"></div>
     <button class="btn btn-primary" id="confirmBtn" style="width:100%;justify-content:center">Confirmer et payer →</button>
@@ -958,6 +958,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 /* ====== CONFIG (modifiable) ====== */
@@ -1025,12 +1026,25 @@ let promoValid = null; // { code, discount } ou null
 let promoTimer = null;
 
 async function validatePromo(code) {
-  // Validation des codes de parrainage désactivée (nécessitait un backend).
-  // Le champ reste affiché ; aucune réduction n'est appliquée côté front.
   const status = $("#promoStatus"), msg = $("#promoMsg");
-  promoValid = null;
-  if (status) status.textContent = '';
-  if (msg) msg.style.display = 'none';
+  code = code.trim().toUpperCase();
+  if (!code) { promoValid=null; if(status) status.textContent=''; if(msg) msg.style.display='none'; render(); return; }
+  if (code.length < 5) return;
+  if(status){ status.textContent='…'; status.style.color='var(--muted)'; }
+  if (!sb) return;
+  const email = $("#email")?.value?.trim().toLowerCase();
+  const { data, error } = await sb.from('promo_codes').select('discount,owner_email,uses_left').eq('code', code).single();
+  if (error || !data || data.uses_left < 1) {
+    promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
+    if(msg){ msg.textContent='Code invalide ou déjà utilisé.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
+  } else if (email && data.owner_email === email) {
+    promoValid=null; if(status){ status.textContent='✗'; status.style.color='var(--magenta)'; }
+    if(msg){ msg.textContent='Vous ne pouvez pas utiliser votre propre code de parrainage.'; msg.style.color='var(--magenta)'; msg.style.display='block'; }
+  } else {
+    promoValid={ code, discount: data.discount };
+    if(status){ status.textContent='✓'; status.style.color='var(--cyan)'; }
+    if(msg){ msg.textContent=`Super ! ${data.discount}€ de réduction appliqués 🎉`; msg.style.color='var(--cyan)'; msg.style.display='block'; }
+  }
   render();
 }
 
@@ -1041,6 +1055,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     promoTimer = setTimeout(()=>validatePromo(e.target.value), 600);
   });
 });
+
+/* ====== SUPABASE (clés publiques) ====== */
+const SUPABASE_URL = "https://fjadiqwhjatywwwubmqu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_mpKSb4kNKLL2ok-gy8SNhg_svQw1Mml"; // clé publishable (publique, sûre côté navigateur)
+let sb=null;
+try{ sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){ console.error("Supabase init:",e); }
 
 /* ====== UTILS ====== */
 const $ = s => document.querySelector(s);
@@ -1061,9 +1081,14 @@ let view=new Date(); view.setDate(1);
 const todayStr=ymd(new Date());
 
 /* ====== DATA ====== */
-// Front seul : pas de backend de disponibilités. Toutes les dates futures
-// apparaissent comme disponibles. (À rebrancher plus tard sur une vraie source.)
-async function loadBusy(){ return []; }
+async function loadBusy(){
+  if(!sb) return [];
+  try{
+    const { data, error } = await sb.rpc('busy_periods');
+    if(error) throw error;
+    return (data||[]).map(r=>({start:r.start_date,end:r.end_date,status:r.status}));
+  }catch(e){ console.error("Lecture dispos:",e); return []; }
+}
 function buildUnavailable(){
   unavailable=new Set();
   periods.filter(p=>p.status!=='pending').forEach(p=>{ let d=p.start; while(parse(d)<=parse(p.end)){ unavailable.add(d); d=addDays(d,1);} });
@@ -1140,43 +1165,80 @@ function render(){
 }
 
 /* ====== SOUMISSION ====== */
-$("#submitBtn").addEventListener('click', ()=>{
+$("#submitBtn").addEventListener('click', async ()=>{
   const name=$("#name").value.trim(),email=$("#email").value.trim(),phone=$("#phone").value.trim();
   if(!(selStart&&selEnd&&name&&(email||phone))){ $("#formErr").style.display='block'; return; }
   $("#formErr").style.display='none';
+  const btn=$("#submitBtn"); btn.disabled=true; const old=btn.textContent; btn.textContent="Enregistrement…";
+
+  // Re-vérifie les disponibilités au dernier moment
+  periods=await loadBusy(); buildUnavailable(); renderCalendar();
+  if(rangeHasConflict(selStart,selEnd)){ flash("Désolé, ces dates viennent d'être prises. Choisissez d'autres dates."); btn.disabled=false; btn.textContent=old; return; }
 
   const days=daysInclusive(selStart,selEnd);
   const pricing=getPrice(days);
   const bat=batCost(days);
-  const total=pricing.total + bat;
+  const promoDisco=promoValid?promoValid.discount:0;
+  const total=Math.max(0, pricing.total + bat - promoDisco);
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
   const choice=getPayChoice();
+  const soldeMode=(choice==='acompte')?getSoldeMode():null;
   const aPayer=montantAPayer(total,choice);
 
-  // Message pré-rempli envoyé sur WhatsApp pour finaliser la réservation
-  const msgTxt=`Bonjour, je souhaite réserver la JBL PartyBox 720 (réf. ${ref}) du ${fr(selStart)} au ${fr(selEnd)} — ${days} jour${days>1?'s':''}.`
-    +` Montant : ${eur(total)}${choice==='acompte'?' (acompte '+eur(aPayer)+')':''}.`
-    +` Nom : ${name}${phone?' · tél : '+phone:''}${email?' · email : '+email:''}.`
-    +(msg?` Précision : ${msg}.`:'')
-    +` Merci de me confirmer la disponibilité !`;
-  const waUrl=`https://wa.me/33669111052?text=${encodeURIComponent(msgTxt)}`;
+  const row={ ref, start_date:selStart, end_date:selEnd, name, email:email||null, phone:phone||null,
+    message:msg||null, total, caution:PRODUCT.caution, status:'pending',
+    options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0,
+      batteries_cout: bat, tarif_label: pricing.label, jours: days,
+      promo_code: promoValid?.code||null, promo_discount: promoDisco } };
+
+  if(sb){
+    const { error } = await sb.from('bookings').insert(row);
+    if(error){ console.error("Insert:",error); flash("Une erreur est survenue. Réessayez ou contactez-nous."); btn.disabled=false; btn.textContent=old; return; }
+  }
 
   // Récapitulatif dans la modale
   const soldeLabel = choice==='acompte' ? ` · solde <b style="color:var(--ink)">${eur(total-aPayer)}</b> au retrait` : '';
   $("#refNum").textContent=ref;
   const detailsEl=$("#modalDetails");
-  if(detailsEl) detailsEl.innerHTML=`📅 ${fr(selStart)} → ${fr(selEnd)}<br>💰 <b style="color:var(--ink)">${eur(total)}</b> · ${pricing.label}${soldeLabel}`;
+  if(detailsEl) detailsEl.innerHTML=`📅 ${fr(selStart)} → ${fr(selEnd)}<br>💰 <b style="color:var(--ink)">${eur(total)}</b> · ${pricing.label}${soldeLabel}<br>💳 À régler en ligne : <b style="color:var(--ink)">${eur(aPayer)}</b>`;
 
-  // Bouton confirmer → ouvre WhatsApp
+  // Bouton confirmer → crée la session Stripe et redirige
   const confirmBtn=$("#confirmBtn");
-  confirmBtn.textContent='Confirmer sur WhatsApp →';
-  confirmBtn.onclick=()=>{ window.open(waUrl,'_blank','noopener'); };
+  const datesStr=`${fr(selStart)} → ${fr(selEnd)}`;
+  confirmBtn.textContent='Confirmer et payer →';
+  confirmBtn.onclick=async()=>{
+    confirmBtn.disabled=true; confirmBtn.textContent='Redirection vers le paiement…';
+    try{
+      const res=await fetch(`${SUPABASE_URL}/functions/v1/create-checkout`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`},
+        body:JSON.stringify({ ref, total, choice, email:email||null, name,
+          dates:datesStr, tarifLabel:pricing.label,
+          promoCode: promoValid?.code||null, promoDiscount: promoDisco })
+      });
+      const data=await res.json();
+      if(data.url) window.location.href=data.url;
+      else throw new Error(data.error||'No URL');
+    }catch(e){
+      console.error('create-checkout:',e);
+      $("#confirmErr").style.display='block';
+      confirmBtn.disabled=false; confirmBtn.textContent='Confirmer et payer →';
+    }
+  };
 
   $("#confirmErr").style.display='none';
   $("#modalStep1").style.display='block';
   $("#modalStep2").style.display='none';
   $("#modal").classList.add('show');
+
+  // Réinitialise le formulaire
+  periods=await loadBusy(); buildUnavailable();
+  selStart=null;selEnd=null;phase=0;
+  $("#name").value='';$("#email").value='';$("#phone").value='';$("#message").value='';
+  if($("#optBat")) $("#optBat").checked=false;
+  updateSel(); renderCalendar();
+  btn.disabled=false; btn.textContent=old;
 });
 const closeModal=()=>$("#modal").classList.remove('show');
 $("#closeModal").addEventListener('click',closeModal);
@@ -1236,7 +1298,9 @@ const LEGAL = {
     <h4>Finalités du traitement</h4>
     <ul><li>Gestion des réservations et des paiements</li><li>Envoi de la confirmation de réservation</li><li>Suivi de la relation client</li><li>Obligations légales et comptables</li></ul>
     <h4>Sous-traitants</h4>
-    <p><b>WhatsApp</b> (Meta) : les demandes de réservation envoyées via le bouton de confirmation transitent par WhatsApp pour nous permettre de vous recontacter.<br>
+    <p><b>Stripe</b> (paiement) : les données bancaires sont traitées exclusivement par Stripe et ne transitent jamais par nos serveurs. Stripe est certifié PCI-DSS.<br>
+    <b>Supabase</b> (base de données) : les données de réservation sont stockées dans une base sécurisée hébergée en Europe.<br>
+    <b>Resend</b> (e-mails) : utilisé pour l'envoi des e-mails de confirmation de réservation.<br>
     <b>GitHub Pages</b> (hébergement du site) : aucune donnée personnelle n'est transmise à GitHub dans le cadre de la navigation.</p>
     <h4>Durée de conservation</h4>
     <p>Les données sont conservées 3 ans à compter de la dernière réservation, conformément aux obligations comptables et fiscales françaises.</p>
@@ -1300,6 +1364,17 @@ $("#year").textContent=new Date().getFullYear();
   renderDow(); render();
   periods=await loadBusy(); buildUnavailable();
   selStart=null;selEnd=null; updateSel(); renderCalendar();
+
+  // Retour depuis Stripe (paiement réussi)
+  const paye=new URLSearchParams(location.search).get('paye');
+  if(paye){
+    $("#refNumOk").textContent=paye;
+    $("#modalStep1").style.display='none';
+    $("#modalStep2").style.display='block';
+    $("#modal").classList.add('show');
+    periods=await loadBusy(); buildUnavailable(); renderCalendar();
+    history.replaceState({},'',location.pathname);
+  }
 })();
 
 /* ====== ANIMATION TEXTE DYNAMIQUE H1 ====== */
