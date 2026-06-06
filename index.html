@@ -682,6 +682,15 @@
           <label>3. Options</label>
           <label class="optline optdis"><input type="checkbox" id="optBat" disabled><span><b>Ajouter des batteries</b> — utilisation 100 % sans fil <b class="op" id="batPrice">Bientôt disponible</b></span></label>
         </div>
+
+        <div class="field">
+          <label>4. Code de parrainage <span style="color:var(--muted);font-weight:400">(facultatif)</span></label>
+          <div style="position:relative">
+            <input type="text" id="promoCode" placeholder="Ex : JEAN-A3X7P2" autocomplete="off" style="text-transform:uppercase;letter-spacing:1px">
+            <span id="promoStatus" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:.85rem;font-weight:700"></span>
+          </div>
+          <div id="promoMsg" style="font-size:.82rem;margin-top:8px;display:none"></div>
+        </div>
       </div>
 
       <div class="summary reveal">
@@ -695,6 +704,7 @@
           <span class="badge-saving" style="font-size:.78rem;color:var(--cyan);opacity:.8"></span>
         </div>
         <div class="sum-row" id="rowBat" style="display:none"><span>Batteries (option)</span><b id="sBat">—</b></div>
+        <div class="sum-row" id="rowPromo" style="display:none"><span>Code parrainage 🎁</span><b id="sPromo" style="color:var(--cyan)">-15€</b></div>
         <div class="sum-total"><span>Total location</span><span class="amt" id="sTotal">—</span></div>
         <div class="sum-cau">🛡️ Caution restituable : <b style="color:var(--ink)">450€ par chèque</b>, prise au retrait et rendue au retour du matériel en bon état.<br><span style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:.78rem;color:var(--cyan);opacity:.8">✨ Pré-autorisation carte (sans chèque) bientôt disponible</span></div>
 
@@ -980,9 +990,44 @@ function montantAPayer(total, choice){
 }
 let lastBooking=null;
 
+/* ====== CODE PROMO ====== */
+let promoValid = null; // { code, discount } ou null
+let promoTimer = null;
+
+async function validatePromo(code) {
+  const el = $("#promoCode"), status = $("#promoStatus"), msg = $("#promoMsg");
+  code = code.trim().toUpperCase();
+  if (!code) { promoValid=null; status.textContent=''; msg.style.display='none'; render(); return; }
+  if (code.length < 5) return;
+  status.textContent='…'; status.style.color='var(--muted)';
+  if (!sb) return;
+  const email = $("#email")?.value?.trim().toLowerCase();
+  const { data, error } = await sb.from('promo_codes').select('discount,owner_email,uses_left').eq('code', code).single();
+  if (error || !data || data.uses_left < 1) {
+    promoValid=null; status.textContent='✗'; status.style.color='var(--magenta)';
+    msg.textContent='Code invalide ou déjà utilisé.'; msg.style.color='var(--magenta)'; msg.style.display='block';
+  } else if (email && data.owner_email === email) {
+    promoValid=null; status.textContent='✗'; status.style.color='var(--magenta)';
+    msg.textContent='Vous ne pouvez pas utiliser votre propre code de parrainage.'; msg.style.color='var(--magenta)'; msg.style.display='block';
+  } else {
+    promoValid={ code, discount: data.discount };
+    status.textContent='✓'; status.style.color='var(--cyan)';
+    msg.textContent=`Super ! ${data.discount}€ de réduction appliqués 🎉`; msg.style.color='var(--cyan)'; msg.style.display='block';
+  }
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const pi = $("#promoCode");
+  if(pi) pi.addEventListener('input', e=>{
+    clearTimeout(promoTimer);
+    promoTimer = setTimeout(()=>validatePromo(e.target.value), 600);
+  });
+});
+
 /* ====== SUPABASE (clés publiques) ====== */
 const SUPABASE_URL = "https://kmlbxkmbtxoazpnozebx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_ypFoPl2SEkP1pbMVwrO2gQ_NC_R4mPM";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttbGJ4a21idHhvYXpwbm96ZWJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2MDg4NTUsImV4cCI6MjA5NjE4NDg1NX0.bUadmRwPpzzRMDG-b3GCNpwxIj_9DBwiVFaN9el21bI";
 let sb=null;
 try{ sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }catch(e){ console.error("Supabase init:",e); }
 
@@ -1070,12 +1115,15 @@ function render(){
   const days=(selStart&&selEnd)?daysInclusive(selStart,selEnd):0;
   const pricing=getPrice(days);
   const bat=batCost(days);
-  const total=pricing.total+bat;
+  const promoDisco=promoValid?promoValid.discount:0;
+  const total=Math.max(0, pricing.total+bat-promoDisco);
   $("#sDates").textContent=(selStart&&selEnd)?`${fr(selStart)} → ${fr(selEnd)}`:"—";
   $("#sDays").textContent=days?days+(days>1?" jours":" jour"):"—";
   $("#sBase").textContent=days?pricing.label:"—";
   const rowBat=$("#rowBat"), sBat=$("#sBat");
   if(rowBat){ if(bat>0){ rowBat.style.display='flex'; sBat.textContent=eur(bat); } else rowBat.style.display='none'; }
+  const rowPromo=$("#rowPromo");
+  if(rowPromo) rowPromo.style.display=promoDisco>0?'flex':'none';
   $("#sTotal").textContent=eur(total);
   const badge=$("#sBadge");
   if(badge){ if(pricing.badge){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
@@ -1136,7 +1184,8 @@ $("#submitBtn").addEventListener('click', async ()=>{
         method:'POST',
         headers:{'Content-Type':'application/json','Authorization':`Bearer ${SUPABASE_KEY}`},
         body:JSON.stringify({ ref, total, choice, email:email||null, name,
-          dates:`${fr(selStart)} → ${fr(selEnd)}`, tarifLabel:pricing.label })
+          dates:`${fr(selStart)} → ${fr(selEnd)}`, tarifLabel:pricing.label,
+          promoCode: promoValid?.code||null, promoDiscount: promoValid?.discount||0 })
       });
       const data=await res.json();
       if(data.url) window.location.href=data.url;
