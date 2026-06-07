@@ -194,10 +194,11 @@
     font-weight: 900;
     line-height: 1.15;
     letter-spacing: -1px;
-    font-size: clamp(2rem, 3vw, 3.4rem);
+    font-size: clamp(1.85rem, 2.4vw, 2.7rem);
     max-width: 100%;
     margin-bottom: 0;
   }
+  .hero h1 .nw{white-space:nowrap}
   .grad {
     font-style: normal;
     background: var(--grad);
@@ -206,7 +207,8 @@
     color: transparent;
   }
   
-  .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:22px 0 32px}
+  .hero-signature{font-family:var(--display);font-weight:500;font-size:1.06rem;color:#fff;opacity:.9;margin:14px 0 0;letter-spacing:.2px}
+  .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:18px 0 30px}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   
   /* HERO IMAGE À DROITE */
@@ -592,13 +594,13 @@
       </div>
 
       <h1 class="reveal">
-        Besoin de louer <br>
-        <span class="grad">une enceinte à Paris</span> pour <br>
-        <span id="dynamic-text" class="grad">un week-end ?</span>
+        Louez une <span class="grad">enceinte de soirée</span><br>
+        à Paris<br>
+        pour <span id="dynamic-text">un week-end&nbsp;?</span>
       </h1>
+      <p class="reveal hero-signature">« Le son d'un club, sans la régie ni le câblage. »</p>
       
       <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 : 800 Watts de gros son, basses profondes et lumières intégrées, <b style="color:var(--ink)">sans prise de tête</b>. Sur secteur ou <b style="color:var(--ink)">100 % sans fil</b> avec le pack batterie en option.</p>
-      <p class="reveal" style="margin:6px 0 0;font-family:var(--display);font-weight:600;font-size:1.08rem;color:var(--cyan)">« Le son d'un club, sans la régie ni le câblage. »</p>
       <div class="hero-cta reveal">
         <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
         <a href="#produit" class="btn btn-ghost">Voir l'enceinte</a>
@@ -1444,7 +1446,7 @@ $("#year").textContent=new Date().getFullYear();
   const phrases = [
     "un week-end ?",
     "un anniversaire ?",
-    "une soirée ?"
+    "une fête ?"
   ];
   
   let index = 0;
