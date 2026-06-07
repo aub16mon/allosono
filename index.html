@@ -129,7 +129,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Où et quand récupère-t-on le matériel ?","acceptedAnswer":{"@type":"Answer","text":"Au 53 rue des Batignolles, 75017 Paris, du lundi au vendredi de 10h à 13h, sur réservation."}},
+    {"@type":"Question","name":"Où et quand récupère-t-on le matériel ?","acceptedAnswer":{"@type":"Answer","text":"Au 53 rue des Batignolles, 75017 Paris, du lundi au vendredi de 13h à 14h, sur réservation."}},
     {"@type":"Question","name":"Quelle est la puissance de l'enceinte ?","acceptedAnswer":{"@type":"Answer","text":"La JBL PartyBox 720 délivre 800 Watts, largement de quoi sonoriser d'une petite soirée à un événement d'une centaine de personnes."}},
     {"@type":"Question","name":"Comment connecter ma musique ?","acceptedAnswer":{"@type":"Answer","text":"En Bluetooth 5.4 depuis votre téléphone, ou en filaire via les entrées AUX, USB-C."}},
     {"@type":"Question","name":"Comment fonctionne la caution ?","acceptedAnswer":{"@type":"Answer","text":"Une caution de 400€ par empreinte bancaire (aucun débit) est demandée : la veille du retrait, nous envoyons un lien sécurisé Stripe pour l'autoriser. Les fonds sont simplement bloqués, puis libérés au retour de l'enceinte en bon état."}},
@@ -137,7 +137,7 @@
     {"@type":"Question","name":"Peut-on louer une enceinte pour un anniversaire à Paris ?","acceptedAnswer":{"@type":"Answer","text":"Oui, ALLO SONO propose la location de la JBL PartyBox 720 pour les anniversaires à Paris et en Île-de-France. 800 Watts, lumières intégrées, connexion Bluetooth — parfait pour une fête réussie."}},
     {"@type":"Question","name":"Où louer une enceinte Bluetooth puissante à Paris 17 ?","acceptedAnswer":{"@type":"Answer","text":"ALLO SONO est situé au 53 rue des Batignolles, Paris 17e. Nous proposons la location de la JBL PartyBox 720, une enceinte de 800 Watts avec lumières intégrées, idéale pour toutes vos soirées."}},
     {"@type":"Question","name":"Peut-on louer une sono pour un mariage à Paris ?","acceptedAnswer":{"@type":"Answer","text":"Oui, la JBL PartyBox 720 est idéale pour sonoriser un vin d'honneur ou une soirée dansante. Deux entrées XLR permettent de brancher un micro pour les discours."}},
-    {"@type":"Question","name":"Livrez-vous l'enceinte à domicile ?","acceptedAnswer":{"@type":"Answer","text":"Le retrait se fait au 53 rue des Batignolles, Paris 17e, du lundi au vendredi de 10h à 13h. Contactez-nous sur WhatsApp pour tout besoin particulier."}}
+    {"@type":"Question","name":"Livrez-vous l'enceinte à domicile ?","acceptedAnswer":{"@type":"Answer","text":"Le retrait se fait au 53 rue des Batignolles, Paris 17e, du lundi au vendredi de 13h à 14h. Contactez-nous sur WhatsApp pour tout besoin particulier."}}
   ]
 }
 </script>
@@ -164,6 +164,11 @@
   section{position:relative}
 
   /* NAV */
+  .promo-banner{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;text-align:center;font-size:.86rem;font-weight:600;color:#fff;padding:9px 16px;cursor:pointer;background:linear-gradient(90deg,#ff2d8e,#8a4bff);transition:filter .2s}
+  .promo-banner b{font-weight:800}
+  .promo-banner sup{font-size:.6em}
+  .promo-banner .pb-cta{opacity:.9;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+  .promo-banner:hover{filter:brightness(1.08)}
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(10,7,18,.66);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
   .brand{display:inline-flex;align-items:center;gap:5px;font-family:var(--display);font-weight:900;font-size:1.4rem;letter-spacing:-.5px}
@@ -569,6 +574,8 @@
 </head>
 <body>
 
+<div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE">🎉 <b>−10&nbsp;€</b> sur votre 1<sup>re</sup> location avec le code <b>BIENVENUE</b> <span class="pb-cta">— j'en profite →</span></div>
+
 <header class="nav">
   <div class="wrap nav-in">
     <a href="#top" class="brand"><svg class="ball" viewBox="0 0 32 32" aria-hidden="true"><defs><radialGradient id="db" cx="36%" cy="30%" r="80%"><stop offset="0%" stop-color="#fff"/><stop offset="34%" stop-color="#23e6cf"/><stop offset="68%" stop-color="#8a4bff"/><stop offset="100%" stop-color="#ff2d8e"/></radialGradient><clipPath id="dbc"><circle cx="16" cy="16" r="14"/></clipPath></defs><circle cx="16" cy="16" r="14" fill="url(#db)"/><g clip-path="url(#dbc)" stroke="rgba(10,7,18,.32)" stroke-width="1"><line x1="2" y1="9" x2="30" y2="9"/><line x1="2" y1="16" x2="30" y2="16"/><line x1="2" y1="23" x2="30" y2="23"/><line x1="9" y1="2" x2="9" y2="30"/><line x1="16" y1="2" x2="16" y2="30"/><line x1="23" y1="2" x2="23" y2="30"/></g><circle cx="11" cy="11" r="2.4" fill="#fff" opacity=".75"/></svg>ALLO<span>SONO</span></a>
@@ -657,7 +664,7 @@
           <span style="padding:7px 14px;border-radius:999px;border:1px solid rgba(35,230,207,.4);background:rgba(35,230,207,.07);font-size:.82rem;color:var(--cyan)">🎉 Week-end (3j) · <b>120€</b> <span style="opacity:.7;font-size:.75rem">au lieu de 195€</span></span>
           <span style="padding:7px 14px;border-radius:999px;border:1px solid rgba(138,75,255,.4);background:rgba(138,75,255,.07);font-size:.82rem;color:var(--violet)">🗓️ Semaine (7j) · <b>160€</b> <span style="opacity:.7;font-size:.75rem">au lieu de 455€</span></span>
         </div>
-        <p style="font-size:.82rem;color:var(--muted);margin:-6px 0 16px;line-height:1.5">💡 <b style="color:var(--ink)">Tarif dégressif : 1 jour 65€ · 2 jours 100€ · 3 jours 120€, puis +10€/jour.</b> Pour une soirée le week-end (retrait vendredi → retour lundi) = 3 jours, et le jour du retour n'est pas facturé.</p>
+        <p style="font-size:.82rem;color:var(--muted);margin:-6px 0 16px;line-height:1.5">💡 <b style="color:var(--ink)">À partir de 65€/jour</b> — le jour du retour n'est pas facturé.</p>
         <a href="#reservation" class="btn btn-primary">Vérifier les dates & réserver →</a>
       </div>
     </div>
@@ -696,7 +703,7 @@
     <div class="reveal"><div class="kicker">Comment ça marche</div><h2>Une location <span class="grad">sans stress</span>, en 4 étapes.</h2></div>
     <div class="steps">
       <div class="step reveal"><div class="n"></div><h3>Réservez en ligne</h3><p>Choisissez vos dates et payez en ligne (acompte 30 % ou totalité). Vos dates sont bloquées dès réception du paiement.</p></div>
-      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan)">🕙 Lun–Ven · 10h à 13h</b></p></div>
+      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan)">🕙 Lun–Ven · 13h à 14h</b></p></div>
       <div class="step reveal"><div class="n"></div><h3>Faites la fête</h3><p>Bluetooth, musique, lumières : tout est prêt, à vous de jouer.</p></div>
       <div class="step reveal"><div class="n"></div><h3>Retour & caution libérée</h3><p>Vous ramenez l'enceinte à la date convenue ; l'empreinte bancaire est libérée automatiquement.</p></div>
     </div>
@@ -716,7 +723,7 @@
           <label>1. Choisissez vos dates <span class="req">*</span></label>
           <div style="display:flex;gap:9px;align-items:flex-start;background:rgba(255,45,142,.07);border:1px solid rgba(255,45,142,.25);border-radius:12px;padding:11px 14px;margin:0 0 14px;font-size:.82rem;color:var(--muted);line-height:1.5">
             <span style="flex:0 0 auto;font-size:1rem">🕙</span>
-            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, du lundi au vendredi (10h–13h), au 53 rue des Batignolles. <b style="color:var(--ink)">Pour une soirée le week-end :</b> retrait le vendredi, retour le lundi — <b style="color:var(--ink)">le jour du retour n'est pas facturé</b>. <a href="https://wa.me/33669111052" target="_blank" rel="noopener" style="color:var(--cyan);white-space:nowrap">Hors horaires ? WhatsApp →</a></span>
+            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, du lundi au vendredi (13h–14h), au 53 rue des Batignolles. <b style="color:var(--ink)">Pour une soirée le week-end :</b> retrait le vendredi, retour le lundi — <b style="color:var(--ink)">le jour du retour n'est pas facturé</b>. <a href="https://wa.me/33669111052" target="_blank" rel="noopener" style="color:var(--cyan);white-space:nowrap">Hors horaires ? WhatsApp →</a></span>
           </div>
           <div class="cal" id="calendar">
             <div class="cal-head">
@@ -748,9 +755,9 @@
         </div>
 
         <div class="field">
-          <label>4. Code de parrainage <span style="color:var(--muted);font-weight:400">(facultatif)</span></label>
+          <label>4. Code promo <span style="color:var(--muted);font-weight:400">(facultatif — BIENVENUE, parrainage…)</span></label>
           <div style="position:relative">
-            <input type="text" id="promoCode" placeholder="Ex : JEAN-A3X7P2" autocomplete="off" style="text-transform:uppercase;letter-spacing:1px">
+            <input type="text" id="promoCode" placeholder="Ex : BIENVENUE" autocomplete="off" style="text-transform:uppercase;letter-spacing:1px">
             <span id="promoStatus" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:.85rem;font-weight:700"></span>
           </div>
           <div id="promoMsg" style="font-size:.82rem;margin-top:8px;display:none"></div>
@@ -759,7 +766,7 @@
 
       <div class="summary reveal">
         <h3>Votre réservation</h3>
-        <div class="sum-row"><span>Matériel</span><b>PACK SONO ESSENTIEL — JBL PartyBox 720</b></div>
+        <div class="sum-row" style="align-items:flex-start"><span>Matériel</span><b style="text-align:right;font-weight:600">JBL PartyBox 720<br><span style="font-weight:500;color:var(--muted);font-size:.85rem">câble d'alimentation<br>housse de protection</span></b></div>
         <div class="sum-row"><span>Retrait → retour</span><b id="sDates">—</b></div>
         <div class="sum-row"><span>Durée facturée</span><b id="sDays">—</b></div>
         <div class="sum-row"><span>Tarif</span><b id="sBase">—</b></div>
@@ -768,8 +775,8 @@
           <span class="badge-saving" style="font-size:.78rem;color:var(--cyan);opacity:.8"></span>
         </div>
         <div class="sum-row" id="rowBat" style="display:none"><span>Batteries (option)</span><b id="sBat">—</b></div>
-        <div class="sum-row" id="rowPromo" style="display:none"><span>Code parrainage 🎁</span><b id="sPromo" style="color:var(--cyan)">-15€</b></div>
-        <div class="sum-total"><span>Total location</span><span class="amt" id="sTotal">—</span></div>
+        <div class="sum-row" id="rowPromo" style="display:none"><span>Code promo 🎁</span><b id="sPromo" style="color:var(--cyan)">-10€</b></div>
+        <div class="sum-total"><span>Total location</span><span style="display:flex;align-items:baseline;gap:10px"><span id="sStrike" style="display:none;font-family:var(--display);font-size:1.15rem;color:var(--muted);text-decoration:line-through;opacity:.55"></span><span class="amt" id="sTotal">—</span></span></div>
         <div class="sum-cau">🛡️ Caution : <b style="color:var(--ink)">empreinte bancaire de 400€</b> (aucun débit), à valider via un lien sécurisé envoyé <b>la veille du retrait</b>, libérée au retour du matériel en bon état.<br><span style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:.78rem;color:var(--cyan);opacity:.8">✨ Sans chèque · empreinte 100 % sécurisée par Stripe</span></div>
 
         <div class="payopt">
@@ -810,7 +817,7 @@
       <div>
         <div style="font-size:1.4rem;margin-bottom:8px">🎁</div>
         <div style="font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:6px">Parrainez un ami, gagnez tous les deux</div>
-        <p style="color:var(--muted);font-size:.92rem;max-width:46ch">Recommandez ALLO SONO à un proche : il bénéficie de <b style="color:var(--ink)">15€ de réduction</b> sur sa première location, et vous aussi sur la vôtre. Envoyez-nous simplement un message WhatsApp.</p>
+        <p style="color:var(--muted);font-size:.92rem;max-width:46ch">Recommandez ALLO SONO à un proche : il bénéficie de <b style="color:var(--ink)">10€ de réduction</b> sur sa première location, et vous aussi sur la vôtre. Envoyez-nous simplement un message WhatsApp.</p>
       </div>
       <a href="https://wa.me/33669111052?text=Bonjour%2C%20je%20souhaite%20parrainer%20un%20ami%20!" class="btn btn-ghost" target="_blank" rel="noopener" style="white-space:nowrap;flex-shrink:0">Parrainer un ami →</a>
     </div>
@@ -836,7 +843,7 @@
         <div class="ci"><div class="b">✉️</div><div><b>E-mail</b><span><a href="mailto:aubin.simon.pro@gmail.com">aubin.simon.pro@gmail.com</a></span></div></div>
         <div class="ci"><div class="b">🕐</div><div><b>Retrait &amp; retour</b>
           <span style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
-            <span style="padding:6px 14px;border-radius:999px;background:rgba(35,230,207,.12);border:1px solid rgba(35,230,207,.35);color:var(--cyan);font-weight:800;font-size:.9rem;letter-spacing:.3px">🕙 10h – 13h</span>
+            <span style="padding:6px 14px;border-radius:999px;background:rgba(35,230,207,.12);border:1px solid rgba(35,230,207,.35);color:var(--cyan);font-weight:800;font-size:.9rem;letter-spacing:.3px">🕙 13h – 14h</span>
             <span style="color:var(--muted);font-size:.88rem">Lundi au vendredi</span>
           </span>
         </div></div>
@@ -853,7 +860,7 @@
   <div class="wrap">
     <div class="reveal" style="text-align:center"><div class="kicker">Questions fréquentes</div><h2 style="margin:0 auto">On vous explique tout.</h2></div>
     <div class="faq" id="faq">
-      <div class="qa reveal"><button>Où et quand récupère-t-on le matériel ? <span class="pm">+</span></button><div class="a"><p>Au <b>53 rue des Batignolles, 75017 Paris</b>. Le retrait et le retour se font <b>du lundi au vendredi, de 10h à 13h</b>, sur réservation. On vous confirme le créneau précis après votre demande.</p></div></div>
+      <div class="qa reveal"><button>Où et quand récupère-t-on le matériel ? <span class="pm">+</span></button><div class="a"><p>Au <b>53 rue des Batignolles, 75017 Paris</b>. Le retrait et le retour se font <b>du lundi au vendredi, de 13h à 14h</b>, sur réservation. On vous confirme le créneau précis après votre demande.</p></div></div>
       <div class="qa reveal"><button>Pour combien de personnes ? Quelle puissance ? <span class="pm">+</span></button><div class="a"><p>La JBL PartyBox 720 délivre <b>800 Watts</b> : largement de quoi sonoriser d'une petite soirée en appartement à un événement d'une centaine de personnes, selon le volume du lieu (intérieur ou extérieur).</p></div></div>
       <div class="qa reveal"><button>Comment je connecte ma musique ? <span class="pm">+</span></button><div class="a"><p>En <b>Bluetooth 5.4</b> depuis votre téléphone (Spotify, Deezer, Apple Music…), ou en filaire via les entrées <b>AUX, USB-C</b>. Vous allumez, vous connectez, c'est parti — aucun réglage compliqué.</p></div></div>
       <div class="qa reveal"><button>Puis-je brancher un micro ? <span class="pm">+</span></button><div class="a"><p>Oui, l'enceinte dispose de <b>deux entrées XLR</b> (micro, guitare ou console DJ) — parfait pour le karaoké, un discours ou un petit live. Le micro n'est pas inclus pour le moment : écrivez-nous si vous en avez besoin.</p></div></div>
@@ -1194,8 +1201,10 @@ function render(){
   const rowBat=$("#rowBat"), sBat=$("#sBat");
   if(rowBat){ if(bat>0){ rowBat.style.display='flex'; sBat.textContent=eur(bat); } else rowBat.style.display='none'; }
   const rowPromo=$("#rowPromo");
-  if(rowPromo) rowPromo.style.display=promoDisco>0?'flex':'none';
+  if(rowPromo){ rowPromo.style.display=promoDisco>0?'flex':'none'; const sp=$("#sPromo"); if(sp&&promoDisco>0) sp.textContent='-'+eur(promoDisco); }
   $("#sTotal").textContent=days?eur(total):"—";
+  const fullRate=PRODUCT.price*days, strikeEl=$("#sStrike");
+  if(strikeEl){ if(days && total<fullRate){ strikeEl.textContent=eur(fullRate); strikeEl.style.display='inline'; } else strikeEl.style.display='none'; }
   const badge=$("#sBadge");
   if(badge){ if(pricing.badge){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
   const choice=getPayChoice();
@@ -1326,7 +1335,7 @@ const LEGAL = {
     <p>Une <b>empreinte bancaire de 400 €</b> est exigée à titre de garantie. La veille du retrait, un lien sécurisé Stripe est envoyé au locataire pour l'autoriser : <b>aucun montant n'est débité</b>, la somme est simplement <b>bloquée</b> sur la carte, puis <b>libérée au retour</b> du matériel en bon état de fonctionnement. L'empreinte expire automatiquement après quelques jours.</p>
     <p>Cette empreinte de 400 € <b>ne limite pas</b> la responsabilité du locataire : en cas de dommage, de perte ou de vol, l'empreinte est capturée et le locataire reste redevable du solde éventuel dans les conditions de l'article 7.</p>
     <h4>6. Retrait et retour du matériel</h4>
-    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, du lundi au vendredi de 10h à 13h, aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
+    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, du lundi au vendredi de 13h à 14h, aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
     <h4>7. Responsabilité du locataire</h4>
     <p>Le locataire s'engage à utiliser le matériel conformément à sa destination, à ne pas le sous-louer, et à le restituer dans l'état dans lequel il l'a reçu. En cas de dommage, de perte ou de vol, le locataire est responsable des frais de réparation ou de remplacement <b>à concurrence de la valeur de remplacement à neuf du matériel et de ses accessoires</b>. L'empreinte de caution (400 €) est alors capturée en priorité, et le <b>solde éventuel reste dû</b> par le locataire sur la base du contrat de location accepté.</p>
     <h4>8. Annulation</h4>
@@ -1446,6 +1455,19 @@ $("#year").textContent=new Date().getFullYear();
       target.classList.add('neon-in');
     }, 300);
   }, 3500);
+})();
+
+/* ====== BANNIÈRE PROMO : applique le code BIENVENUE ====== */
+(function promoBanner(){
+  const b=document.getElementById('promoBanner'); if(!b) return;
+  function apply(){
+    const inp=document.getElementById('promoCode');
+    if(inp) inp.value='BIENVENUE';
+    if(typeof validatePromo==='function') validatePromo('BIENVENUE');
+    const r=document.getElementById('reservation'); if(r) r.scrollIntoView({behavior:'smooth'});
+  }
+  b.addEventListener('click', apply);
+  b.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); apply(); } });
 })();
 </script>
 </body>
