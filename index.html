@@ -169,7 +169,8 @@
   .promo-banner sup{font-size:.6em}
   .promo-banner .pb-cta{opacity:.9;font-weight:700;text-decoration:underline;text-underline-offset:2px}
   .promo-banner:hover{filter:brightness(1.08)}
-  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(10,7,18,.66);border-bottom:1px solid var(--line)}
+  .topbar{position:sticky;top:0;z-index:50}
+  header.nav{position:relative;z-index:50;backdrop-filter:blur(14px);background:rgba(10,7,18,.66);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
   .brand{display:inline-flex;align-items:center;gap:5px;font-family:var(--display);font-weight:900;font-size:1.4rem;letter-spacing:-.5px}
   .brand .ball{width:26px;height:26px;flex:0 0 auto}
@@ -574,6 +575,7 @@
 </head>
 <body>
 
+<div class="topbar">
 <div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE">🎉 <b>−10&nbsp;€</b> sur votre 1<sup>re</sup> location avec le code <b>BIENVENUE</b> <span class="pb-cta">— j'en profite →</span></div>
 
 <header class="nav">
@@ -591,6 +593,7 @@
     <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">☰</button>
   </div>
 </header>
+</div>
 
 <section class="hero" id="top">
   <div class="wrap">
@@ -812,14 +815,6 @@
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Service au top et matériel de qualité !</div><p>Super expérience pour un événement familial. Le rapport qualité/prix est imbattable et la JBL était très facile à connecter en Bluetooth. L'équipe est réactive et arrangeante. Je recommande à 100 % !</p><div class="who">— Marine L., Clichy</div></div>
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Ambiance garantie jusqu'au bout de la nuit !</div><p>Louée pour une soirée entre potes, c'était le feu. Les jeux de lumière intégrés ont direct mis l'ambiance. Prise en main et retour du matériel ultra rapides — foncez les yeux fermés !</p><div class="who">— Nicolas B., Montreuil</div></div>
       <div class="tcard"><div class="stars" aria-label="4 étoiles sur 5">★★★★☆</div><div class="th">Bonne expérience globale</div><p>Matériel en parfait état et très facile à utiliser. Les horaires de retrait sont un peu limités en semaine mais on s'arrange facilement par WhatsApp. Rapport qualité/prix excellent.</p><div class="who">— Marc V., Paris 9e</div></div>
-    </div>
-    <div class="parrain reveal" style="margin-top:30px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;border:1px solid rgba(255,207,74,.25);border-radius:18px;padding:22px 28px;background:rgba(255,207,74,.05)">
-      <div>
-        <div style="font-size:1.4rem;margin-bottom:8px">🎁</div>
-        <div style="font-family:var(--display);font-weight:800;font-size:1.1rem;margin-bottom:6px">Parrainez un ami, gagnez tous les deux</div>
-        <p style="color:var(--muted);font-size:.92rem;max-width:46ch">Recommandez ALLO SONO à un proche : il bénéficie de <b style="color:var(--ink)">10€ de réduction</b> sur sa première location, et vous aussi sur la vôtre. Envoyez-nous simplement un message WhatsApp.</p>
-      </div>
-      <a href="https://wa.me/33669111052?text=Bonjour%2C%20je%20souhaite%20parrainer%20un%20ami%20!" class="btn btn-ghost" target="_blank" rel="noopener" style="white-space:nowrap;flex-shrink:0">Parrainer un ami →</a>
     </div>
 
     <div class="greview reveal">
