@@ -561,6 +561,7 @@
   @media(max-width:900px){
     .hero .wrap{grid-template-columns:1fr}
     .hero-img-wrap{order:-1}
+    .hero-img-wrap img{aspect-ratio:auto;height:auto;object-fit:contain}
     .book-grid{grid-template-columns:1fr}.summary{position:static}
     .contact-grid{grid-template-columns:1fr}
     .hero h1{max-width:none}
@@ -615,7 +616,7 @@
       </h1>
 
       <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 fait danser 80 à 100 personnes, avec des basses profondes et un jeu de lumières intégré, <b style="color:var(--ink)">sans prise de tête</b>. Sur secteur ou <b style="color:var(--ink)">100 % sans fil</b> avec le pack batterie en option.</p>
-      <p class="reveal hero-signature"><span class="grad">Votre club privé nomade, signé</span> <img src="images/jbl-logo-v2.png" alt="JBL" style="height:1.9em;vertical-align:baseline;margin-left:.4em;filter:brightness(0) invert(1)" /></p>
+      <p class="reveal hero-signature"><span class="grad">Votre club privé nomade,</span> <span style="white-space:nowrap"><span class="grad">signé</span> <img src="images/jbl-logo-v2.png" alt="JBL" style="height:1.6em;vertical-align:baseline;margin-left:.35em;filter:brightness(0) invert(1)" /></span></p>
       <div class="hero-cta reveal">
         <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
         <a href="#produit" class="btn btn-ghost">Voir l'enceinte</a>
@@ -776,7 +777,6 @@
         <div class="sum-row" style="align-items:flex-start"><span>Matériel</span><b style="text-align:right;font-weight:600">JBL PartyBox 720<br><span style="font-weight:500;color:var(--muted);font-size:.85rem">câble d'alimentation<br>housse de protection</span></b></div>
         <div class="sum-row"><span>Retrait → retour</span><b id="sDates">—</b></div>
         <div class="sum-row"><span>Durée facturée</span><b id="sDays">—</b></div>
-        <div class="sum-row"><span>Tarif</span><b id="sBase">—</b></div>
         <div id="sBadge" style="display:none;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-radius:12px;background:rgba(35,230,207,.1);border:1px solid rgba(35,230,207,.3);margin-top:4px">
           <span class="badge-label" style="font-weight:800;font-size:.88rem;color:var(--cyan)"></span>
           <span class="badge-saving" style="font-size:.78rem;color:var(--cyan);opacity:.8"></span>
@@ -1196,7 +1196,6 @@ function render(){
   const total=Math.max(0, pricing.total+bat-promoDisco);
   $("#sDates").textContent=(selStart&&selEnd&&days>=1)?`${fr(selStart)} → ${fr(selEnd)}`:"—";
   $("#sDays").textContent=days?days+(days>1?" jours":" jour")+" de location":"—";
-  $("#sBase").textContent=days?pricing.label:"—";
   const rowBat=$("#rowBat"), sBat=$("#sBat");
   if(rowBat){ if(bat>0){ rowBat.style.display='flex'; sBat.textContent=eur(bat); } else rowBat.style.display='none'; }
   const rowPromo=$("#rowPromo");
