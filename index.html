@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="theme-color" content="#0a0712" />
 <meta name="author" content="ALLO SONO" />
@@ -164,11 +165,13 @@
   section{position:relative}
 
   /* NAV */
-  .promo-banner{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;text-align:center;font-size:.86rem;font-weight:600;color:#fff;padding:9px 16px;cursor:pointer;background:linear-gradient(90deg,#ff2d8e,#8a4bff);transition:filter .2s}
+  .promo-banner{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;white-space:nowrap;text-align:center;color:#fff;padding:8px 14px;cursor:pointer;background:linear-gradient(90deg,#ff2d8e,#8a4bff);transition:filter .2s;overflow:hidden}
+  .promo-banner .pb-amt{flex:0 0 auto;font-family:var(--display);font-weight:900;font-size:1.18rem;letter-spacing:-.5px;line-height:1;text-shadow:0 1px 6px rgba(0,0,0,.18)}
+  .promo-banner .pb-txt{min-width:0;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:.84rem}
   .promo-banner b{font-weight:800}
   .promo-banner sup{font-size:.6em}
-  .promo-banner .pb-cta{opacity:.9;font-weight:700;text-decoration:underline;text-underline-offset:2px}
   .promo-banner:hover{filter:brightness(1.08)}
+  @media(max-width:430px){.promo-banner .pb-ctx{display:none}.promo-banner .pb-amt{font-size:1.1rem}}
   .topbar{position:sticky;top:0;z-index:50}
   header.nav{position:relative;z-index:50;backdrop-filter:blur(14px);background:rgba(10,7,18,.66);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
@@ -200,7 +203,7 @@
     font-weight: 900;
     line-height: 1.15;
     letter-spacing: -1px;
-    font-size: clamp(2rem, 2.7vw, 3rem);
+    font-size: clamp(2.2rem, 3vw, 3.3rem);
     max-width: 100%;
     margin-bottom: 0;
   }
@@ -213,9 +216,10 @@
     color: transparent;
   }
   
-  .hero-occasion{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,1.8vw,1.6rem);color:var(--muted);margin:10px 0 0}
-  .hero-signature{font-family:var(--display);font-weight:500;font-size:1.02rem;color:#fff;opacity:.85;margin:12px 0 0;letter-spacing:.2px}
-  .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:18px 0 30px}
+  .hero-occasion{font-family:var(--display);font-weight:800;font-size:clamp(1.4rem,5vw,2.2rem);color:#fff;margin:12px 0 0;white-space:nowrap}
+  .hero-signature{font-family:var(--display);font-weight:600;font-size:1.05rem;color:#fff;opacity:.9;margin:0 0 24px;letter-spacing:.2px}
+  .hero-signature .jbl-mark{font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;color:#fff;letter-spacing:-1px;font-size:1.1em;opacity:1}
+  .hero p.lead{color:var(--muted);font-size:1.16rem;max-width:54ch;margin:18px 0 14px}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   
   /* HERO IMAGE À DROITE */
@@ -559,7 +563,7 @@
     .book-grid{grid-template-columns:1fr}.summary{position:static}
     .contact-grid{grid-template-columns:1fr}
     .hero h1{max-width:none}
-    .product{grid-template-columns:1fr;gap:30px}.pimg{aspect-ratio:5/4;max-height:420px;position:static}
+    .product{grid-template-columns:1fr;gap:30px}.pimg{aspect-ratio:1/1;max-height:460px;position:static}
   }
   @media(max-width:680px){
     body{padding-bottom:72px}
@@ -569,14 +573,14 @@
     .nav-links a{padding:14px 0;width:100%;border-bottom:1px solid var(--line)}
     .nav-links .btn{margin-top:12px}.burger{display:block}.grid2{grid-template-columns:1fr}
     .sec,.book{padding:56px 0}.form-card{padding:22px}.specs .spec{border-right:none;padding:16px 14px}
-    .hero h1{font-size:2.2rem}
+    .hero h1{font-size:2.45rem}
   }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-<div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE">🎉 <b>−10&nbsp;€</b> sur votre 1<sup>re</sup> location avec le code <b>BIENVENUE</b> <span class="pb-cta">— j'en profite →</span></div>
+<div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE"><span class="pb-amt">−10€</span><span class="pb-txt"><span class="pb-ctx">sur votre 1<sup>re</sup> location · </span>code <b>BIENVENUE</b></span></div>
 
 <header class="nav">
   <div class="wrap nav-in">
@@ -605,12 +609,12 @@
       </div>
 
       <h1 class="reveal">
-        Louez une <span class="grad">enceinte<br>de soirée</span> à Paris
+        Louez une <span class="grad">enceinte<br>de soirée</span> à Paris<br>
+        pour <span id="dynamic-text">un week-end&nbsp;?</span>
       </h1>
-      <p class="reveal hero-occasion">pour <span id="dynamic-text">un week-end&nbsp;?</span></p>
-      <p class="reveal hero-signature">« Le son d'un club, sans la régie ni le câblage. »</p>
-      
-      <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 : 800 Watts de gros son, basses profondes et lumières intégrées, <b style="color:var(--ink)">sans prise de tête</b>. Sur secteur ou <b style="color:var(--ink)">100 % sans fil</b> avec le pack batterie en option.</p>
+
+      <p class="lead reveal">Réservez en quelques minutes, récupérez aux Batignolles, branchez en Bluetooth — et la fête démarre. La JBL PartyBox 720 fait danser 80 à 100 personnes, avec des basses profondes et un jeu de lumières intégré, <b style="color:var(--ink)">sans prise de tête</b>. Sur secteur ou <b style="color:var(--ink)">100 % sans fil</b> avec le pack batterie en option.</p>
+      <p class="reveal hero-signature"><span class="grad">Votre club privé nomade, signé</span> <span class="jbl-mark">JBL</span></p>
       <div class="hero-cta reveal">
         <a href="#reservation" class="btn btn-primary">Vérifier les disponibilités →</a>
         <a href="#produit" class="btn btn-ghost">Voir l'enceinte</a>
@@ -706,7 +710,7 @@
     <div class="reveal"><div class="kicker">Comment ça marche</div><h2>Une location <span class="grad">sans stress</span>, en 4 étapes.</h2></div>
     <div class="steps">
       <div class="step reveal"><div class="n"></div><h3>Réservez en ligne</h3><p>Choisissez vos dates et payez en ligne (acompte 30 % ou totalité). Vos dates sont bloquées dès réception du paiement.</p></div>
-      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan)">🕙 Lun–Ven · 13h à 14h</b></p></div>
+      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan);display:block;margin-top:10px;white-space:nowrap">🕙 Lun–Ven · 13h à 14h</b></p></div>
       <div class="step reveal"><div class="n"></div><h3>Faites la fête</h3><p>Bluetooth, musique, lumières : tout est prêt, à vous de jouer.</p></div>
       <div class="step reveal"><div class="n"></div><h3>Retour & caution libérée</h3><p>Vous ramenez l'enceinte à la date convenue ; l'empreinte bancaire est libérée automatiquement.</p></div>
     </div>
@@ -1432,7 +1436,7 @@ $("#year").textContent=new Date().getFullYear();
 
   const phrases = [
     "un week-end ?",
-    "un anniversaire ?",
+    "un anniv' ?",
     "une fête ?"
   ];
   
