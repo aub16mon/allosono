@@ -1,23 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512">
   <defs>
-    <radialGradient id="g" cx="34%" cy="28%" r="85%">
+    <radialGradient id="g" cx="36%" cy="30%" r="80%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="30%" stop-color="#23e6cf"/>
-      <stop offset="64%" stop-color="#8a4bff"/>
+      <stop offset="34%" stop-color="#23e6cf"/>
+      <stop offset="68%" stop-color="#8a4bff"/>
       <stop offset="100%" stop-color="#ff2d8e"/>
     </radialGradient>
-    <clipPath id="r"><rect x="0" y="0" width="64" height="64" rx="14"/></clipPath>
+    <clipPath id="c"><circle cx="32" cy="32" r="30"/></clipPath>
   </defs>
-  <g clip-path="url(#r)">
-    <rect width="64" height="64" fill="url(#g)"/>
-    <g stroke="rgba(10,7,18,.28)" stroke-width="2">
-      <line x1="0" y1="18" x2="64" y2="18"/>
-      <line x1="0" y1="32" x2="64" y2="32"/>
-      <line x1="0" y1="46" x2="64" y2="46"/>
-      <line x1="18" y1="0" x2="18" y2="64"/>
-      <line x1="32" y1="0" x2="32" y2="64"/>
-      <line x1="46" y1="0" x2="46" y2="64"/>
-    </g>
-    <circle cx="22" cy="22" r="5" fill="#ffffff" opacity=".8"/>
+  <circle cx="32" cy="32" r="30" fill="url(#g)"/>
+  <g clip-path="url(#c)" stroke="rgba(10,7,18,.34)" stroke-width="2">
+    <line x1="2" y1="18" x2="62" y2="18"/>
+    <line x1="2" y1="32" x2="62" y2="32"/>
+    <line x1="2" y1="46" x2="62" y2="46"/>
+    <line x1="18" y1="2" x2="18" y2="62"/>
+    <line x1="32" y1="2" x2="32" y2="62"/>
+    <line x1="46" y1="2" x2="46" y2="62"/>
   </g>
+  <circle cx="21" cy="19" r="5.5" fill="#fff" opacity=".7"/>
 </svg>
