@@ -1401,6 +1401,7 @@ $("#year").textContent=new Date().getFullYear();
   });
   if(PHOTOS.length>1) wrap.classList.add('multi');
   const counter=$("#carCounter");
+  if(counter) counter.textContent='1 / '+PHOTOS.length;
   function go(n){ const arr=slides.querySelectorAll('img'); if(!arr.length) return; i=(n+arr.length)%arr.length;
     arr.forEach((im,x)=>im.classList.toggle('on',x===i)); dots.querySelectorAll('i').forEach((dd,x)=>dd.classList.toggle('on',x===i));
     if(counter) counter.textContent=(i+1)+' / '+arr.length; }
