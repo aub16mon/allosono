@@ -583,7 +583,7 @@
 <body>
 
 <div class="topbar">
-<div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE"><span class="pb-amt">−10€</span><span class="pb-txt"><span class="pb-ctx">sur votre 1<sup>re</sup> location · </span>code <b>BIENVENUE</b></span></div>
+<div class="promo-banner" id="promoBanner" role="button" tabindex="0" aria-label="Appliquer le code BIENVENUE"><span class="pb-amt">−5€</span><span class="pb-txt"><span class="pb-ctx">sur votre 1<sup>re</sup> location · </span>code <b>BIENVENUE</b></span></div>
 
 <header class="nav">
   <div class="wrap nav-in">
@@ -778,7 +778,7 @@
           <span class="badge-saving" style="font-size:.78rem;color:var(--cyan);opacity:.8"></span>
         </div>
         <div class="sum-row" id="rowBat" style="display:none"><span>Batteries (option)</span><b id="sBat">—</b></div>
-        <div class="sum-row" id="rowPromo" style="display:none"><span>Code promo 🎁</span><b id="sPromo" style="color:var(--cyan)">-10€</b></div>
+        <div class="sum-row" id="rowPromo" style="display:none"><span>Code promo 🎁</span><b id="sPromo" style="color:var(--cyan)">-5€</b></div>
         <div class="sum-total"><span>Total location</span><span style="display:flex;align-items:baseline;gap:10px"><span id="sStrike" style="display:none;font-family:var(--display);font-size:1.15rem;color:var(--muted);text-decoration:line-through;opacity:.55"></span><span class="amt" id="sTotal">—</span></span></div>
         <div class="sum-cau">🛡️ Caution : <b style="color:var(--ink)">empreinte bancaire de 300€</b> (aucun débit), à valider via un lien sécurisé envoyé <b>la veille du retrait</b>, libérée au retour du matériel en bon état.<br><span style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:.78rem;color:var(--cyan);opacity:.8">✨ Sans chèque · empreinte 100 % sécurisée par Stripe</span></div>
 
@@ -1186,11 +1186,17 @@ function getPayChoice(){ const el=document.querySelector('input[name="payChoice"
 function getSoldeMode(){ const el=document.querySelector('input[name="soldeMode"]:checked'); return el?el.value:null; }
 function batOn(){ const el=$("#optBat"); return !!(el&&el.checked); }
 function batCost(days){ if(!batOn()||!days) return 0; const b=OPTIONS.batteries; return b.parJour? b.prix*days : b.prix; }
+/* BIENVENUE : réduction valable uniquement à partir de 2 jours de location */
+function promoDiscountFor(days){
+  if(!promoValid) return 0;
+  if(promoValid.code==='BIENVENUE' && days<2) return 0;
+  return promoValid.discount;
+}
 function render(){
   const days=(selStart&&selEnd)?nights(selStart,selEnd):0;
   const pricing=getPrice(days);
   const bat=batCost(days);
-  const promoDisco=promoValid?promoValid.discount:0;
+  const promoDisco=promoDiscountFor(days);
   const total=Math.max(0, pricing.total+bat-promoDisco);
   $("#sDates").textContent=(selStart&&selEnd&&days>=1)?`${fr(selStart)} → ${fr(selEnd)}`:"—";
   $("#sDays").textContent=days?days+(days>1?" jours":" jour")+" de location":"—";
@@ -1198,6 +1204,7 @@ function render(){
   if(rowBat){ if(bat>0){ rowBat.style.display='flex'; sBat.textContent=eur(bat); } else rowBat.style.display='none'; }
   const rowPromo=$("#rowPromo");
   if(rowPromo){ rowPromo.style.display=promoDisco>0?'flex':'none'; const sp=$("#sPromo"); if(sp&&promoDisco>0) sp.textContent='-'+eur(promoDisco); }
+  if(promoValid && promoValid.code==='BIENVENUE'){ const pm=$("#promoMsg"); if(pm){ if(days>=2){ pm.textContent=`Super ! ${promoValid.discount}€ de réduction appliqués 🎉`; pm.style.color='var(--cyan)'; } else { pm.textContent='Le code BIENVENUE est valable à partir de 2 jours de location.'; pm.style.color='var(--muted)'; } pm.style.display='block'; } }
   $("#sTotal").textContent=days?eur(total):"—";
   const fullRate=PRODUCT.price*days, strikeEl=$("#sStrike");
   if(strikeEl){ if(days && total<fullRate){ strikeEl.textContent=eur(fullRate); strikeEl.style.display='inline'; } else strikeEl.style.display='none'; }
@@ -1225,7 +1232,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const days=nights(selStart,selEnd);
   const pricing=getPrice(days);
   const bat=batCost(days);
-  const promoDisco=promoValid?promoValid.discount:0;
+  const promoDisco=promoDiscountFor(days);
   const total=Math.max(0, pricing.total + bat - promoDisco);
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
@@ -1238,7 +1245,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
     options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0,
       batteries_cout: bat, tarif_label: pricing.label, jours: days,
       base_total: pricing.total + bat,
-      promo_code: promoValid?.code||null, promo_discount: promoDisco } };
+      promo_code: promoDisco>0 ? (promoValid?.code||null) : null, promo_discount: promoDisco } };
 
   if(sb){
     const { error } = await sb.from('bookings').insert(row);
