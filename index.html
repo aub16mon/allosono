@@ -577,6 +577,9 @@
     .sec,.book{padding:56px 0}.form-card{padding:22px}.specs .spec{padding:16px 14px}
     .hero h1{font-size:2.45rem}
     .hero-signature{white-space:nowrap;font-size:.82rem}
+    /* Carrousel : sur mobile, badge raccourci + jamais sous le compteur */
+    .pimg .badge{max-width:calc(100% - 84px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.74rem}
+    .pimg .badge .badge-pre{display:none}
   }
 </style>
 </head>
@@ -643,7 +646,7 @@
   <div class="wrap">
     <div class="product">
       <div class="pimg reveal" id="pcar">
-        <span class="badge">PACK SONO ESSENTIEL · <b>JBL PartyBox 520</b></span>
+        <span class="badge"><span class="badge-pre">PACK SONO ESSENTIEL · </span><b>JBL PartyBox 520</b></span>
         <div class="slides" id="slides"></div>
         <div class="ph" id="phFallback" style="display:none"><div class="spk"></div><p>JBL PARTYBOX 520</p></div>
         <div class="car-counter" id="carCounter">1 / 6</div>
