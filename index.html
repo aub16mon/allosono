@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- Meta Pixel Code -->
+<!-- Meta Pixel (déclenché uniquement après consentement cookies) -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1708640523597870');
-fbq('track', 'PageView');
+function enableMetaPixel(){
+  if(window._mpLoaded) return; window._mpLoaded=true;
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1708640523597870');
+  fbq('track', 'PageView');
+}
 </script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1708640523597870&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<!-- End Meta Pixel -->
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="theme-color" content="#0a0712" />
@@ -598,6 +598,17 @@ src="https://www.facebook.com/tr?id=1708640523597870&ev=PageView&noscript=1"
     .pimg .badge{max-width:calc(100% - 84px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.74rem}
     .pimg .badge .badge-pre{display:none}
   }
+  /* Bandeau consentement cookies */
+  .cookie-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:rgba(16,11,32,.97);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 18px 50px rgba(0,0,0,.5);backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:14px}
+  .cookie-banner p{color:var(--ink);font-size:.9rem;line-height:1.5;margin:0}
+  .cookie-banner p a{color:var(--cyan)}
+  .cookie-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+  .cookie-btn{font-family:var(--display);font-weight:700;font-size:.86rem;padding:10px 20px;border-radius:999px;cursor:pointer;border:1px solid var(--line);transition:filter .2s,background .2s}
+  .cookie-btn.refuse{background:transparent;color:var(--muted)}
+  .cookie-btn.refuse:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+  .cookie-btn.accept{background:var(--grad);color:#fff;border-color:transparent}
+  .cookie-btn.accept:hover{filter:brightness(1.08)}
+  @media(max-width:680px){.cookie-banner{bottom:84px}}
 </style>
 </head>
 <body>
@@ -1493,6 +1504,39 @@ $("#year").textContent=new Date().getFullYear();
   b.addEventListener('click', apply);
   b.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); apply(); } });
 })();
+
+/* ====== CONSENTEMENT COOKIES (gère le Meta Pixel) ====== */
+(function(){
+  var KEY='cookie_consent';
+  var choice=null;
+  try{ choice=localStorage.getItem(KEY); }catch(e){}
+  // Choix déjà fait : on agit tout de suite, sans bandeau.
+  if(choice==='granted'){ if(typeof enableMetaPixel==='function') enableMetaPixel(); return; }
+  if(choice==='denied'){ return; }
+  // Pas de choix : on affiche le bandeau une fois le DOM prêt.
+  function initBanner(){
+    var banner=document.getElementById('cookieBanner');
+    if(!banner) return;
+    banner.hidden=false;
+    function decide(val){
+      try{ localStorage.setItem(KEY,val); }catch(e){}
+      banner.hidden=true;
+      if(val==='granted' && typeof enableMetaPixel==='function') enableMetaPixel();
+    }
+    document.getElementById('cookieAccept').addEventListener('click',function(){ decide('granted'); });
+    document.getElementById('cookieRefuse').addEventListener('click',function(){ decide('denied'); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initBanner);
+  else initBanner();
+})();
 </script>
+<!-- Bandeau consentement cookies -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Consentement aux cookies" hidden>
+  <p>🍪 On utilise des cookies de mesure d'audience (Meta&nbsp;Pixel) pour améliorer le site. Vous pouvez les accepter ou les refuser. <a data-legal="cgv">En savoir plus</a></p>
+  <div class="cookie-actions">
+    <button class="cookie-btn refuse" id="cookieRefuse" type="button">Refuser</button>
+    <button class="cookie-btn accept" id="cookieAccept" type="button">Accepter</button>
+  </div>
+</div>
 </body>
 </html>
