@@ -84,7 +84,7 @@ function enableMetaPixel(){
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
       "opens": "10:00",
       "closes": "19:00"
     }
@@ -147,7 +147,7 @@ function enableMetaPixel(){
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Où et quand récupère-t-on le matériel ?","acceptedAnswer":{"@type":"Answer","text":"Au 53 rue des Batignolles, 75017 Paris, du lundi au vendredi, sur réservation (fermé le week-end)."}},
+    {"@type":"Question","name":"Où et quand récupère-t-on le matériel ?","acceptedAnswer":{"@type":"Answer","text":"Au 53 rue des Batignolles, 75017 Paris, 7j/7 sur réservation."}},
     {"@type":"Question","name":"Quelle est la puissance de l'enceinte ?","acceptedAnswer":{"@type":"Answer","text":"La JBL PartyBox 520 délivre 400 Watts RMS, largement de quoi sonoriser d'une petite soirée à un événement de 50 à 80 personnes. Batterie intégrée jusqu'à 15 h, roulettes et poignée télescopique : 100 % sans fil et facile à transporter."}},
     {"@type":"Question","name":"Comment connecter ma musique ?","acceptedAnswer":{"@type":"Answer","text":"En Bluetooth 5.4 depuis votre téléphone, ou en filaire via les entrées AUX, USB-C."}},
     {"@type":"Question","name":"Comment fonctionne la caution ?","acceptedAnswer":{"@type":"Answer","text":"Une caution de 300€ par empreinte bancaire (aucun débit) est demandée : la veille du retrait, nous envoyons un lien sécurisé Stripe pour l'autoriser. Les fonds sont simplement bloqués, puis libérés au retour de l'enceinte en bon état."}},
@@ -155,7 +155,7 @@ function enableMetaPixel(){
     {"@type":"Question","name":"Peut-on louer une enceinte pour un anniversaire à Paris ?","acceptedAnswer":{"@type":"Answer","text":"Oui, ALLO SONO propose la location de la JBL PartyBox 520 pour les anniversaires à Paris et en Île-de-France. 400 Watts, lumières intégrées, connexion Bluetooth, parfait pour une fête réussie."}},
     {"@type":"Question","name":"Où louer une enceinte Bluetooth puissante à Paris 17 ?","acceptedAnswer":{"@type":"Answer","text":"ALLO SONO est situé au 53 rue des Batignolles, Paris 17e. Nous proposons la location de la JBL PartyBox 520, une enceinte de 400 Watts avec lumières intégrées, idéale pour toutes vos soirées."}},
     {"@type":"Question","name":"Peut-on louer une sono pour un mariage à Paris ?","acceptedAnswer":{"@type":"Answer","text":"Oui, la JBL PartyBox 520 est idéale pour sonoriser un vin d'honneur ou une soirée dansante. Deux entrées XLR permettent de brancher un micro pour les discours."}},
-    {"@type":"Question","name":"Livrez-vous l'enceinte à domicile ?","acceptedAnswer":{"@type":"Answer","text":"Le retrait se fait au 53 rue des Batignolles, Paris 17e, du lundi au vendredi (fermé le week-end). Contactez-nous sur WhatsApp pour tout besoin particulier."}}
+    {"@type":"Question","name":"Livrez-vous l'enceinte à domicile ?","acceptedAnswer":{"@type":"Answer","text":"Le retrait se fait au 53 rue des Batignolles, Paris 17e, 7j/7 sur réservation. Contactez-nous sur WhatsApp pour tout besoin particulier."}}
   ]
 }
 </script>
@@ -744,7 +744,7 @@ function enableMetaPixel(){
     <div class="reveal"><div class="kicker">Comment ça marche</div><h2>Une location <span class="grad">sans stress</span>, en 4 étapes.</h2></div>
     <div class="steps">
       <div class="step reveal"><div class="n"></div><h3>Réservez en ligne</h3><p>Choisissez vos dates et payez en ligne (acompte 30 % ou totalité). Vos dates sont bloquées dès réception du paiement.</p></div>
-      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan);display:block;margin-top:10px;white-space:nowrap">🕙 Lun–Ven · fermé le week-end</b></p></div>
+      <div class="step reveal"><div class="n"></div><h3>Retrait au 53 rue des Batignolles</h3><p>Vous récupérez l'enceinte sur place et réglez le solde éventuel. La caution est déjà gérée par empreinte bancaire validée la veille (aucun chèque). <b style="color:var(--cyan);display:block;margin-top:10px;white-space:nowrap">🕙 Ouvert 7j/7</b></p></div>
       <div class="step reveal"><div class="n"></div><h3>Faites la fête</h3><p>Bluetooth, musique, lumières : tout est prêt, à vous de jouer.</p></div>
       <div class="step reveal"><div class="n"></div><h3>Retour & caution libérée</h3><p>Vous ramenez l'enceinte à la date convenue ; l'empreinte bancaire est libérée automatiquement.</p></div>
     </div>
@@ -764,7 +764,7 @@ function enableMetaPixel(){
           <label>1. Choisissez vos dates <span class="req">*</span></label>
           <div style="display:flex;gap:9px;align-items:flex-start;background:rgba(255,45,142,.07);border:1px solid rgba(255,45,142,.25);border-radius:12px;padding:11px 14px;margin:0 0 14px;font-size:.82rem;color:var(--muted);line-height:1.5">
             <span style="flex:0 0 auto;font-size:1rem">🕙</span>
-            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, du lundi au vendredi, au 53 rue des Batignolles. <b style="color:var(--ink)">Pour une soirée le week-end :</b> retrait le vendredi, retour le lundi, <b style="color:var(--ink)">le jour du retour n'est pas facturé</b>.</span>
+            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, 7j/7, au 53 rue des Batignolles. <b style="color:var(--ink)">Le jour du retour n'est pas facturé</b>.</span>
           </div>
           <div class="cal" id="calendar">
             <div class="cal-head">
@@ -870,8 +870,8 @@ function enableMetaPixel(){
         <div class="ci"><div class="b">✉️</div><div><b>E-mail</b><span><a href="mailto:aubin.simon.pro@gmail.com">aubin.simon.pro@gmail.com</a></span></div></div>
         <div class="ci"><div class="b">🕐</div><div><b>Retrait &amp; retour</b>
           <span style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
-            <span style="padding:6px 14px;border-radius:999px;background:rgba(35,230,207,.12);border:1px solid rgba(35,230,207,.35);color:var(--cyan);font-weight:800;font-size:.9rem;letter-spacing:.3px">🕙 Lun–Ven</span>
-            <span style="color:var(--muted);font-size:.88rem">Fermé samedi &amp; dimanche</span>
+            <span style="padding:6px 14px;border-radius:999px;background:rgba(35,230,207,.12);border:1px solid rgba(35,230,207,.35);color:var(--cyan);font-weight:800;font-size:.9rem;letter-spacing:.3px">🕙 Ouvert 7j/7</span>
+            <span style="color:var(--muted);font-size:.88rem">Tous les jours, sur réservation</span>
           </span>
         </div></div>
         <a href="#reservation" class="btn btn-primary" style="margin-top:8px">Réserver maintenant →</a>
@@ -887,7 +887,7 @@ function enableMetaPixel(){
   <div class="wrap">
     <div class="reveal" style="text-align:center"><div class="kicker">Questions fréquentes</div><h2 style="margin:0 auto">On vous explique tout.</h2></div>
     <div class="faq" id="faq">
-      <div class="qa reveal"><button>Où et quand récupère-t-on le matériel ? <span class="pm">+</span></button><div class="a"><p>Au <b>53 rue des Batignolles, 75017 Paris</b>. Le retrait et le retour se font <b>du lundi au vendredi</b>, sur réservation. On vous confirme le créneau précis après votre demande.</p></div></div>
+      <div class="qa reveal"><button>Où et quand récupère-t-on le matériel ? <span class="pm">+</span></button><div class="a"><p>Au <b>53 rue des Batignolles, 75017 Paris</b>. Le retrait et le retour se font <b>7j/7</b>, sur réservation. On vous confirme le créneau précis après votre demande.</p></div></div>
       <div class="qa reveal"><button>Pour combien de personnes ? Quelle puissance ? <span class="pm">+</span></button><div class="a"><p>La JBL PartyBox 520 délivre <b>400 Watts RMS</b> : largement de quoi sonoriser d'une petite soirée en appartement à un événement de <b>50 à 80 personnes</b>, selon le volume du lieu (intérieur ou extérieur).</p></div></div>
       <div class="qa reveal"><button>Comment je connecte ma musique ? <span class="pm">+</span></button><div class="a"><p>En <b>Bluetooth 5.4</b> depuis votre téléphone (Spotify, Deezer, Apple Music…), ou en filaire via les entrées <b>AUX, USB-C</b>. Vous allumez, vous connectez, c'est parti, aucun réglage compliqué.</p></div></div>
       <div class="qa reveal"><button>Puis-je brancher un micro ? <span class="pm">+</span></button><div class="a"><p>Oui, l'enceinte dispose de <b>deux entrées XLR</b> (micro, guitare ou console DJ), parfait pour le karaoké, un discours ou un petit live. Le micro n'est pas inclus pour le moment : écrivez-nous si vous en avez besoin.</p></div></div>
@@ -1178,13 +1178,10 @@ function renderCalendar(){
   for(let i=0;i<lead;i++) html+=`<div class="cal-day empty"></div>`;
   for(let d=1;d<=dim;d++){
     const ds=`${y}-${pad(m+1)}-${pad(d)}`;
-    const dow=new Date(y,m,d).getDay(); // 0=dimanche, 6=samedi
     let cls='cal-day';
     if(ds<todayStr) cls+=' past';
     else if(unavailable.has(ds)) cls+=' booked';
-    else if(dow===0||dow===6){ cls+=' closed';
-      if(selStart&&selEnd&&ds>selStart&&ds<selEnd) cls+=' inrange'; }
-    else{ cls+=' avail';
+    else{ cls+=' avail';                         // ouvert 7j/7
       if(ds===selStart||ds===selEnd) cls+=' sel';
       else if(selStart&&selEnd&&ds>selStart&&ds<selEnd) cls+=' inrange'; }
     html+=`<div class="${cls}" data-d="${ds}">${d}</div>`;
@@ -1370,7 +1367,7 @@ const LEGAL = {
     <p>Une <b>empreinte bancaire de 300 €</b> est exigée à titre de garantie. La veille du retrait, un lien sécurisé Stripe est envoyé au locataire pour l'autoriser : <b>aucun montant n'est débité</b>, la somme est simplement <b>bloquée</b> sur la carte, puis <b>libérée au retour</b> du matériel en bon état de fonctionnement. L'empreinte expire automatiquement après quelques jours.</p>
     <p>Cette empreinte de 300 € <b>ne limite pas</b> la responsabilité du locataire : en cas de dommage, de perte ou de vol, l'empreinte est capturée et le locataire reste redevable du solde éventuel dans les conditions de l'article 7.</p>
     <h4>6. Retrait et retour du matériel</h4>
-    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, du lundi au vendredi (fermé le week-end), aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
+    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, 7 jours sur 7, aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
     <h4>7. Responsabilité du locataire</h4>
     <p>Le locataire s'engage à utiliser le matériel conformément à sa destination, à ne pas le sous-louer, et à le restituer dans l'état dans lequel il l'a reçu. En cas de dommage, de perte ou de vol, le locataire est responsable des frais de réparation ou de remplacement <b>à concurrence de la valeur de remplacement à neuf du matériel et de ses accessoires (environ 650 €)</b>. L'empreinte de caution (300 €) est alors capturée en priorité, et le <b>solde éventuel reste dû</b> par le locataire sur la base du contrat de location accepté.</p>
     <h4>8. Annulation</h4>
