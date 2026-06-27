@@ -764,7 +764,7 @@ function enableMetaPixel(){
           <label>1. Choisissez vos dates <span class="req">*</span></label>
           <div style="display:flex;gap:9px;align-items:flex-start;background:rgba(255,45,142,.07);border:1px solid rgba(255,45,142,.25);border-radius:12px;padding:11px 14px;margin:0 0 14px;font-size:.82rem;color:var(--muted);line-height:1.5">
             <span style="flex:0 0 auto;font-size:1rem">🕙</span>
-            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, 7j/7, au 53 rue des Batignolles. <b style="color:var(--ink)">Le jour du retour n'est pas facturé</b>.</span>
+            <span><b style="color:var(--ink)">Retrait & retour en journée</b>, 7j/7, au 53 rue des Batignolles. <b style="color:var(--ink)">Le jour du retour n'est pas facturé</b>. <b style="color:var(--amber)">Retrait ou retour le samedi/dimanche : +20€.</b> 💡 Astuce week-end : <b style="color:var(--cyan)">retrait le vendredi → retour le lundi</b> = tout le week-end, sans supplément.</span>
           </div>
           <div class="cal" id="calendar">
             <div class="cal-head">
@@ -777,7 +777,7 @@ function enableMetaPixel(){
               <span><i class="ds" style="background:rgba(255,255,255,.12)"></i> Disponible</span>
               <span><i class="ds" style="background:var(--grad)"></i> Sélection</span>
               <span><i class="ds" style="background:rgba(255,45,142,.5)"></i> Indisponible</span>
-              <span><i class="ds" style="background:rgba(255,255,255,.12);opacity:.4"></i> Fermé (sam/dim)</span>
+              <span><i class="ds" style="background:var(--amber);opacity:.7"></i> Sam/dim : +20€ (retrait ou retour)</span>
             </div>
             <div class="selinfo" id="selInfo">Chargement des disponibilités…</div>
           </div>
@@ -810,6 +810,7 @@ function enableMetaPixel(){
           <span class="badge-saving" style="font-size:.78rem;color:var(--cyan);opacity:.8"></span>
         </div>
         <div class="sum-row" id="rowBat" style="display:none"><span>Batteries (option)</span><b id="sBat">—</b></div>
+        <div class="sum-row" id="rowWeekend" style="display:none"><span>Supplément week-end 🗓️</span><b id="sWeekend" style="color:var(--amber)">+20€</b></div>
         <div class="sum-row" id="rowPromo" style="display:none"><span>Code promo 🎁</span><b id="sPromo" style="color:var(--cyan)">-5€</b></div>
         <div class="sum-total"><span>Total location</span><span style="display:flex;align-items:baseline;gap:10px"><span id="sStrike" style="display:none;font-family:var(--display);font-size:1.15rem;color:var(--muted);text-decoration:line-through;opacity:.55"></span><span class="amt" id="sTotal">—</span></span></div>
         <div class="sum-cau">🛡️ Caution : <b style="color:var(--ink)">empreinte bancaire de 300€</b> (aucun débit), à valider via un lien sécurisé envoyé <b>la veille du retrait</b>, libérée au retour du matériel en bon état.<br><span style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:.78rem;color:var(--cyan);opacity:.8">✨ Sans chèque · empreinte 100 % sécurisée par Stripe</span></div>
@@ -1221,16 +1222,26 @@ function promoDiscountFor(days){
   if(promoValid.code==='BIENVENUE' && days<2) return 0;
   return promoValid.discount;
 }
+/* Supplément week-end : +20€ si le retrait OU le retour tombe un samedi/dimanche */
+const WEEKEND_FEE=20;
+function weekendSurcharge(start,end){
+  if(!start||!end) return 0;
+  const we=ds=>{ const d=new Date(ds+'T12:00').getDay(); return d===0||d===6; };
+  return (we(start)||we(end)) ? WEEKEND_FEE : 0;
+}
 function render(){
   const days=(selStart&&selEnd)?nights(selStart,selEnd):0;
   const pricing=getPrice(days);
   const bat=batCost(days);
+  const wknd=weekendSurcharge(selStart,selEnd);
   const promoDisco=promoDiscountFor(days);
-  const total=Math.max(0, pricing.total+bat-promoDisco);
+  const total=Math.max(0, pricing.total+bat+wknd-promoDisco);
   $("#sDates").textContent=(selStart&&selEnd&&days>=1)?`${fr(selStart)} → ${fr(selEnd)}`:"—";
   $("#sDays").textContent=days?days+(days>1?" jours":" jour")+" de location":"—";
   const rowBat=$("#rowBat"), sBat=$("#sBat");
   if(rowBat){ if(bat>0){ rowBat.style.display='flex'; sBat.textContent=eur(bat); } else rowBat.style.display='none'; }
+  const rowWeekend=$("#rowWeekend");
+  if(rowWeekend){ if(wknd>0){ rowWeekend.style.display='flex'; $("#sWeekend").textContent='+'+eur(wknd); } else rowWeekend.style.display='none'; }
   const rowPromo=$("#rowPromo");
   if(rowPromo){ rowPromo.style.display=promoDisco>0?'flex':'none'; const sp=$("#sPromo"); if(sp&&promoDisco>0) sp.textContent='-'+eur(promoDisco); }
   if(promoValid && promoValid.code==='BIENVENUE'){ const pm=$("#promoMsg"); if(pm){ if(days>=2){ pm.textContent=`Super ! ${promoValid.discount}€ de réduction appliqués 🎉`; pm.style.color='var(--cyan)'; } else { pm.textContent='Le code BIENVENUE est valable à partir de 2 jours de location.'; pm.style.color='var(--muted)'; } pm.style.display='block'; } }
@@ -1238,7 +1249,7 @@ function render(){
   const fullRate=PRODUCT.price*days, strikeEl=$("#sStrike");
   if(strikeEl){ if(days && total<fullRate){ strikeEl.textContent=eur(fullRate); strikeEl.style.display='inline'; } else strikeEl.style.display='none'; }
   const badge=$("#sBadge");
-  if(badge){ if(pricing.badge){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
+  if(badge){ if(pricing.badge && total<fullRate){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
   const choice=getPayChoice();
   const sBox=$("#soldeBox"); if(sBox) sBox.hidden=(choice!=='acompte');
   const online=days?montantAPayer(total,choice):0;
@@ -1261,8 +1272,9 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const days=nights(selStart,selEnd);
   const pricing=getPrice(days);
   const bat=batCost(days);
+  const wknd=weekendSurcharge(selStart,selEnd);
   const promoDisco=promoDiscountFor(days);
-  const total=Math.max(0, pricing.total + bat - promoDisco);
+  const total=Math.max(0, pricing.total + bat + wknd - promoDisco);
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
   const choice=getPayChoice();
@@ -1273,7 +1285,8 @@ $("#submitBtn").addEventListener('click', async ()=>{
     message:msg||null, total, caution:PRODUCT.caution, status:'pending',
     options:{ pay: choice, montant_en_ligne: aPayer, solde_mode: soldeMode, batteries: bat>0,
       batteries_cout: bat, tarif_label: pricing.label, jours: days,
-      base_total: pricing.total + bat,
+      supplement_weekend: wknd,
+      base_total: pricing.total + bat + wknd,
       promo_code: promoDisco>0 ? (promoValid?.code||null) : null, promo_discount: promoDisco } };
 
   if(sb){
