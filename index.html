@@ -612,6 +612,11 @@ function enableMetaPixel(){
   input.opt-check:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
   input.opt-check:checked{background:var(--magenta)!important;border-color:var(--magenta)!important}
   input.opt-check:checked::after{content:"";position:absolute;left:6px;top:2.5px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  /* Option acompte désactivée quand livraison à domicile */
+  .po.po-off{opacity:.45;cursor:not-allowed}
+  .po.po-off input{cursor:not-allowed}
+  .pay-note{font-size:.8rem;color:var(--cyan);background:rgba(35,230,207,.08);border:1px solid rgba(35,230,207,.25);border-radius:10px;padding:9px 12px;margin:2px 0 10px;line-height:1.45}
+  .pay-note[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -829,6 +834,7 @@ function enableMetaPixel(){
           <div class="po-title">Comment souhaitez-vous régler ?</div>
           <label class="po"><input type="radio" name="payChoice" value="acompte"><span><b>Acompte 30 %</b> en ligne maintenant<small>Le solde se règle au retrait</small></span></label>
           <label class="po"><input type="radio" name="payChoice" value="total" checked><span><b>Payer la totalité</b> en ligne maintenant<small>Plus rien à régler au retrait (hors caution)</small></span></label>
+          <div class="pay-note" id="payNoteLivr" hidden>🚚 Livraison à domicile : seul le <b>paiement en totalité</b> est disponible (pas de retrait sur place pour régler un solde).</div>
           <div class="soldebox" id="soldeBox" hidden>
             <div class="sl">Le solde, au retrait, je le règle :</div>
             <div class="po2row">
@@ -1272,6 +1278,19 @@ function render(){
   if(strikeEl){ if(days && total<fullRate){ strikeEl.textContent=eur(fullRate); strikeEl.style.display='inline'; } else strikeEl.style.display='none'; }
   const badge=$("#sBadge");
   if(badge){ if(pricing.badge && total<fullRate){ badge.style.display='flex'; badge.querySelector('.badge-label').textContent=pricing.badge; badge.querySelector('.badge-saving').textContent=pricing.saving||''; } else badge.style.display='none'; }
+  // Livraison à domicile => paiement total obligatoire (pas de retrait pour régler le solde)
+  const acoR=document.querySelector('input[name="payChoice"][value="acompte"]');
+  const totR=document.querySelector('input[name="payChoice"][value="total"]');
+  const acoLabel=acoR?acoR.closest('.po'):null;
+  if(livrOn()){
+    if(acoR){ if(acoR.checked && totR) totR.checked=true; acoR.disabled=true; }
+    if(acoLabel) acoLabel.classList.add('po-off');
+    const pn1=$("#payNoteLivr"); if(pn1) pn1.hidden=false;
+  } else {
+    if(acoR) acoR.disabled=false;
+    if(acoLabel) acoLabel.classList.remove('po-off');
+    const pn2=$("#payNoteLivr"); if(pn2) pn2.hidden=true;
+  }
   const choice=getPayChoice();
   const sBox=$("#soldeBox"); if(sBox) sBox.hidden=(choice!=='acompte');
   const online=days?montantAPayer(total,choice):0;
@@ -1300,7 +1319,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
   const total=Math.max(0, pricing.total + bat + wknd + livr - promoDisco);
   const ref="AS-"+Date.now().toString().slice(-6);
   const msg=$("#message").value.trim();
-  const choice=getPayChoice();
+  const choice=livrOn()?'total':getPayChoice();   // livraison à domicile = paiement total obligatoire
   const soldeMode=(choice==='acompte')?getSoldeMode():null;
   const aPayer=montantAPayer(total,choice);
 
