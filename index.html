@@ -1263,8 +1263,8 @@ function weekendSurcharge(start,end){
   const we=ds=>{ const d=new Date(ds+'T12:00').getDay(); return d===0||d===6; };
   return (we(start)||we(end)) ? WEEKEND_FEE : 0;
 }
-/* Retrait un mardi : le tarif 1 jour s'affiche/se facture à 79€ (discret, pas de libellé) */
-function isTuesday(ds){ return ds ? new Date(ds+'T12:00').getDay()===2 : false; }
+/* Jour précis à tarif 1 jour = 79€ (demande ponctuelle, discret, pas de libellé) */
+const SPECIAL_DAY_79='2026-07-14';
 /* Livraison & reprise (option, Paris intra-muros) : +39€ par trajet */
 const DELIVERY_FEE=39;
 function livrOn(){ const el=$("#optLivr"); return !!(el&&el.checked); }
@@ -1274,7 +1274,7 @@ function deliveryLabel(){ if(livrOn()&&repriOn()) return 'Livraison + reprise �
 function render(){
   const days=(selStart&&selEnd)?nights(selStart,selEnd):0;
   const pricing=getPrice(days);
-  if(days===1 && isTuesday(selStart)) pricing.total=79;   // mardi : 1 jour à 79€ (discret)
+  if(days===1 && selStart===SPECIAL_DAY_79) pricing.total=79;   // ce jour précis : 1 jour à 79€ (discret)
   const bat=batCost(days);
   const wknd=weekendSurcharge(selStart,selEnd);
   const livr=deliveryCost();
@@ -1330,7 +1330,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
 
   const days=nights(selStart,selEnd);
   const pricing=getPrice(days);
-  if(days===1 && isTuesday(selStart)) pricing.total=79;   // mardi : 1 jour à 79€ (discret)
+  if(days===1 && selStart===SPECIAL_DAY_79) pricing.total=79;   // ce jour précis : 1 jour à 79€ (discret)
   const bat=batCost(days);
   const wknd=weekendSurcharge(selStart,selEnd);
   const livr=deliveryCost();
