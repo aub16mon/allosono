@@ -101,14 +101,16 @@ function enableMetaPixel(){
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "5",
-    "reviewCount": "3",
+    "reviewCount": "5",
     "bestRating": "5",
     "worstRating": "1"
   },
   "review": [
     {"@type":"Review","author":{"@type":"Person","name":"Marin Simon"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"Super son ; service impeccable, très bonne communication avec le loueur. Rien à redire, je recommande !"},
     {"@type":"Review","author":{"@type":"Person","name":"Camille Decherf"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"L'enceinte est parfaite pour les soirées et le loueur très arrangeant !"},
-    {"@type":"Review","author":{"@type":"Person","name":"Vincent Gautronneau"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"Rapide, efficace, du gros son ! Un plaisir."}
+    {"@type":"Review","author":{"@type":"Person","name":"Vincent Gautronneau"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"Rapide, efficace, du gros son ! Un plaisir."},
+    {"@type":"Review","author":{"@type":"Person","name":"Ludivine Delatronchette"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"Super enceinte, parfait pour une grosse fête, gérant très arrangeant, c'était parfait !"},
+    {"@type":"Review","author":{"@type":"Person","name":"Julian Richelet"},"reviewRating":{"@type":"Rating","ratingValue":"5"},"reviewBody":"L'enceinte a été très pratique pour sonoriser une soirée de 50/60 personnes et loueur très dispo et arrangeant !"}
   ]
 }
 </script>
@@ -123,7 +125,7 @@ function enableMetaPixel(){
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "5",
-    "reviewCount": "3",
+    "reviewCount": "5",
     "bestRating": "5",
     "worstRating": "1"
   },
@@ -461,8 +463,8 @@ function enableMetaPixel(){
 
   /* GOOGLE / AVIS */
 
-  .tcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:46px}
-  .tcard{border:1px solid var(--line);border-radius:20px;padding:24px;background:linear-gradient(160deg,var(--panel),rgba(22,16,42,.4))}
+  .tcards{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin-top:46px}
+  .tcard{flex:1 1 300px;max-width:360px;border:1px solid var(--line);border-radius:20px;padding:24px;background:linear-gradient(160deg,var(--panel),rgba(22,16,42,.4))}
   .tcard .stars{color:var(--amber);letter-spacing:2px;margin-bottom:10px;font-size:1.05rem}
   .tcard p{color:var(--ink);font-size:.96rem;margin-bottom:14px}
   .tcard .who{color:var(--muted);font-size:.88rem;font-weight:600}
@@ -647,9 +649,9 @@ function enableMetaPixel(){
   <div class="wrap">
     <div class="hero-text">
       <span class="pill reveal">📍 Paris 17e · au cœur des <b>Batignolles</b></span>
-      <div class="hero-stars reveal" aria-label="5 étoiles sur 5, 3 avis Google">
+      <div class="hero-stars reveal" aria-label="5 étoiles sur 5, 5 avis Google">
         <span class="hs-stars">★★★★★</span>
-        <span class="hs-txt"><b>5,0/5</b> · 3 avis Google</span>
+        <span class="hs-txt"><b>5,0/5</b> · 5 avis Google</span>
       </div>
 
       <h1 class="reveal">
@@ -673,7 +675,7 @@ function enableMetaPixel(){
 
 <div class="trust">
   <div class="wrap trust-in">
-    <div class="t" style="color:var(--amber)">★★★★★ <span style="color:var(--muted)"><b style="color:var(--ink)">5,0/5</b> · 3 avis Google</span></div>
+    <div class="t" style="color:var(--amber)">★★★★★ <span style="color:var(--muted)"><b style="color:var(--ink)">5,0/5</b> · 5 avis Google</span></div>
     <div class="t">🔒 <span><b>Paiement sécurisé</b> par Stripe</span></div>
     <div class="t">⚡ <span><b>Réservation</b> en quelques minutes</span></div>
     <div class="t">📍 <span><b>Retrait</b> au 53 rue des Batignolles</span></div>
@@ -865,6 +867,8 @@ function enableMetaPixel(){
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Super son, service impeccable !</div><p>Super son ; service impeccable, très bonne communication avec le loueur. Rien à redire, je recommande !</p><div class="who">Marin Simon · avis Google</div></div>
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Parfaite pour les soirées</div><p>L'enceinte est parfaite pour les soirées et le loueur très arrangeant !</p><div class="who">Camille Decherf · avis Google</div></div>
       <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Du gros son, un plaisir !</div><p>Rapide, efficace, du gros son ! Un plaisir.</p><div class="who">Vincent Gautronneau · avis Google</div></div>
+      <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Parfait pour une grosse fête</div><p>Super enceinte, parfait pour une grosse fête, gérant très arrangeant, c'était parfait !</p><div class="who">Ludivine Delatronchette · avis Google</div></div>
+      <div class="tcard"><div class="stars" aria-label="5 étoiles sur 5">★★★★★</div><div class="th">Une soirée de 50/60 personnes</div><p>L'enceinte a été très pratique pour sonoriser une soirée de 50/60 personnes et loueur très dispo et arrangeant !</p><div class="who">Julian Richelet · avis Google</div></div>
     </div>
 
     <div class="greview reveal">
