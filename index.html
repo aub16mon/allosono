@@ -29,7 +29,7 @@ function enableMetaPixel(){
 <meta name="geo.position" content="48.8858359;2.3191904" />
 <meta name="ICBM" content="48.8858359, 2.3191904" />
 <title>Location enceinte sono Paris – JBL PartyBox 520 | ALLO SONO</title>
-<meta name="description" content="Louez la JBL PartyBox 520 dès 49€/jour aux Batignolles, Paris 17e : 400 W RMS, basses profondes, lumières, batterie intégrée 100% sans fil. Réservation en ligne, retrait sur place." />
+<meta name="description" content="Louez la JBL PartyBox 520 dès 49 €/jour aux Batignolles (Paris 17e) : 400 W, lumières, batterie 15 h. Réservation en ligne, retrait 7j/7 ou livraison." />
 <meta property="og:title" content="ALLO SONO, Location de matériel de soirée à Paris" />
 <meta property="og:description" content="JBL PartyBox 520 : 400 W RMS, basses profondes, lumières, batterie intégrée sans fil. Retrait Batignolles 75017. Réservez en ligne." />
 <meta property="og:type" content="website" />
@@ -96,7 +96,8 @@ function enableMetaPixel(){
     {"@type": "AdministrativeArea", "name": "Île-de-France"}
   ],
   "sameAs": [
-    "https://www.google.com/maps/place/ALLO+SONO/@48.8858359,2.3191904,17z/data=!3m1!4b1!4m6!3m5!1s0x47e66fd831b1c35b:0x3a57d0b9cf8985ef!8m2!3d48.8858359!4d2.3191904!16s%2Fg%2F11z8jms1yq"
+    "https://www.google.com/maps/place/ALLO+SONO/@48.8858359,2.3191904,17z/data=!3m1!4b1!4m6!3m5!1s0x47e66fd831b1c35b:0x3a57d0b9cf8985ef!8m2!3d48.8858359!4d2.3191904!16s%2Fg%2F11z8jms1yq",
+    "https://www.instagram.com/allo_sono"
   ],
   "aggregateRating": {
     "@type": "AggregateRating",
@@ -889,6 +890,7 @@ function enableMetaPixel(){
         <h3>Parlons de votre soirée</h3>
         <div class="ci"><div class="b">📍</div><div><b>Adresse de retrait</b><span>53 rue des Batignolles, 75017 Paris</span></div></div>
         <div class="ci"><div class="b">💬</div><div><b>WhatsApp</b><span><a href="https://wa.me/33669111052" target="_blank" rel="noopener">06 69 11 10 52</a></span></div></div>
+        <div class="ci"><div class="b">📞</div><div><b>Téléphone</b><span><a href="tel:+33669111052">06 69 11 10 52</a></span></div></div>
         <div class="ci"><div class="b">✉️</div><div><b>E-mail</b><span><a href="mailto:aubin.simon.pro@gmail.com">aubin.simon.pro@gmail.com</a></span></div></div>
         <div class="ci"><div class="b">🕐</div><div><b>Retrait &amp; retour</b>
           <span style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
@@ -908,7 +910,7 @@ function enableMetaPixel(){
 <section class="sec" id="faq">
   <div class="wrap">
     <div class="reveal" style="text-align:center"><div class="kicker">Questions fréquentes</div><h2 style="margin:0 auto">On vous explique tout.</h2></div>
-    <div class="faq" id="faq">
+    <div class="faq" id="faq-list">
       <div class="qa reveal"><button>Où et quand récupère-t-on le matériel ? <span class="pm">+</span></button><div class="a"><p>Au <b>53 rue des Batignolles, 75017 Paris</b>. Le retrait et le retour se font <b>7j/7</b>, sur réservation. On vous confirme le créneau précis après votre demande.</p></div></div>
       <div class="qa reveal"><button>Pour combien de personnes ? Quelle puissance ? <span class="pm">+</span></button><div class="a"><p>La JBL PartyBox 520 délivre <b>400 Watts RMS</b> : largement de quoi sonoriser d'une petite soirée en appartement à un événement de <b>50 à 80 personnes</b>, selon le volume du lieu (intérieur ou extérieur).</p></div></div>
       <div class="qa reveal"><button>Comment je connecte ma musique ? <span class="pm">+</span></button><div class="a"><p>En <b>Bluetooth 5.4</b> depuis votre téléphone (Spotify, Deezer, Apple Music…), ou en filaire via les entrées <b>AUX, USB-C</b>. Vous allumez, vous connectez, c'est parti, aucun réglage compliqué.</p></div></div>
@@ -990,7 +992,7 @@ function enableMetaPixel(){
     <p>© <span id="year"></span> ALLO SONO, 53 rue des Batignolles, 75017 Paris · Tous droits réservés.</p>
     <div class="foot-meta">
       <div class="foot-links">
-        <a href="#" data-legal="ml">Mentions légales</a><a href="#" data-legal="cgv">CGV</a><a href="#" data-legal="conf">Confidentialité</a>
+        <a href="#" data-legal="ml">Mentions légales</a><a href="#" data-legal="cgv">CGV</a><a href="#" data-legal="conf">Confidentialité</a><a href="#" id="manageCookies">Gérer les cookies</a>
       </div>
       <div class="paylogos">
         <span class="secure">🔒 Paiement sécurisé</span>
@@ -1049,7 +1051,7 @@ function enableMetaPixel(){
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10"></script>
 <script>
 
 /* ====== CONFIG (modifiable) ====== */
@@ -1419,9 +1421,11 @@ const LEGAL = {
     Forme juridique : SAS<br>
     Siège social : 61 rue Chardon-Lagache, 75016 Paris<br>
     SIRET : 902 411 065 00011<br>
+    RCS : Paris 902 411 065<br>
+    TVA intracommunautaire : FR67902411065<br>
     Capital social : 1 000 €<br>
     Directeur de la publication : Aubin Simon<br>
-    Contact : aubin.simon.pro@gmail.com · 06 69 11 10 52</p>
+    Contact : aubin.simon.pro@gmail.com · <a href="tel:+33669111052" style="color:var(--cyan)">06 69 11 10 52</a></p>
     <h4>Hébergement</h4>
     <p>GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.<br>
     Site : <a href="https://github.com" target="_blank" rel="noopener" style="color:var(--cyan)">github.com</a></p>
@@ -1458,7 +1462,7 @@ const LEGAL = {
 
   conf:`<h3>Politique de confidentialité</h3><p class="maj">Dernière mise à jour : juin 2026</p>
     <h4>Responsable du traitement</h4>
-    <p><b>OKULO PRODUCTIONS</b>, aubin.simon.pro@gmail.com · 06 69 11 10 52</p>
+    <p><b>OKULO PRODUCTIONS</b>, aubin.simon.pro@gmail.com · <a href="tel:+33669111052" style="color:var(--cyan)">06 69 11 10 52</a></p>
     <h4>Données collectées</h4>
     <p>Lors d'une réservation, nous collectons : nom et prénom, adresse e-mail, numéro de téléphone, dates de location, et tout message facultatif. Ces données sont strictement nécessaires au traitement de votre réservation.</p>
     <h4>Finalités du traitement</h4>
@@ -1467,13 +1471,16 @@ const LEGAL = {
     <p><b>Stripe</b> (paiement) : les données bancaires sont traitées exclusivement par Stripe et ne transitent jamais par nos serveurs. Stripe est certifié PCI-DSS.<br>
     <b>Supabase</b> (base de données) : les données de réservation sont stockées dans une base sécurisée hébergée en Europe.<br>
     <b>Resend</b> (e-mails) : utilisé pour l'envoi des e-mails de confirmation de réservation.<br>
-    <b>GitHub Pages</b> (hébergement du site) : aucune donnée personnelle n'est transmise à GitHub dans le cadre de la navigation.</p>
+    <b>GitHub Pages</b> (hébergement du site) : aucune donnée personnelle n'est transmise à GitHub dans le cadre de la navigation.<br>
+    <b>Meta Platforms Ireland</b> (mesure d'audience publicitaire) : uniquement si vous acceptez les cookies via le bandeau. Transfert hors UE encadré par les clauses contractuelles types.</p>
     <h4>Durée de conservation</h4>
     <p>Les données sont conservées 3 ans à compter de la dernière réservation, conformément aux obligations comptables et fiscales françaises.</p>
     <h4>Vos droits</h4>
     <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité et d'opposition. Pour l'exercer : <a href="mailto:aubin.simon.pro@gmail.com" style="color:var(--cyan)">aubin.simon.pro@gmail.com</a>. Vous pouvez également introduire une réclamation auprès de la <b>CNIL</b> (cnil.fr).</p>
     <h4>Cookies</h4>
-    <p>Ce site n'utilise pas de cookies de tracking ou publicitaires. Seuls des cookies techniques strictement nécessaires au bon fonctionnement du site peuvent être déposés.</p>`
+    <p><b>Cookies techniques</b> (sans consentement) : strictement nécessaires au fonctionnement du site (mémorisation de votre choix en matière de cookies, sécurité du paiement Stripe).</p>
+    <p><b>Cookies de mesure et de publicité</b> (soumis à votre consentement) : le <b>pixel Meta</b> (Meta Platforms Ireland Ltd) est utilisé pour mesurer l'audience de nos publicités et améliorer leur ciblage. Il n'est <b>déposé qu'après votre acceptation</b> via le bandeau cookies, et jamais si vous refusez. Durée de conservation : 13 mois maximum. Ces données peuvent faire l'objet d'un transfert hors Union européenne, encadré par les clauses contractuelles types de la Commission européenne.</p>
+    <p><b>Retirer votre consentement</b> : vous pouvez modifier votre choix à tout moment via le lien <b>« Gérer les cookies »</b> en bas de page. Le retrait est aussi simple que l'acceptation.</p>`
 };
 function openLegal(k){ $("#legalContent").innerHTML = LEGAL[k] || ""; const m=$("#legalModal"); m.classList.add('show'); m.scrollTop=0; const c=m.querySelector('.lmodal-card'); if(c) c.scrollTop=0; }
 function closeLegal(){ $("#legalModal").classList.remove('show'); }
@@ -1485,10 +1492,18 @@ $("#legalModal").addEventListener('click',e=>{if(e.target.id==='legalModal')clos
 // Le bouton payBtn est maintenant un lien WhatsApp généré dynamiquement dans le submit
 
 /* ====== FAQ / NAV / CAL / REVEAL ====== */
-document.querySelectorAll('#faq .qa button').forEach(b=>b.addEventListener('click',()=>{
-  const qa=b.parentElement,a=qa.querySelector('.a'),open=qa.classList.contains('open');
-  qa.classList.toggle('open'); a.style.maxHeight=open?null:a.scrollHeight+'px';
-}));
+document.querySelectorAll('#faq .qa button').forEach((b,i)=>{
+  const qa=b.parentElement, a=qa.querySelector('.a');
+  // Accessibilité : état d'ouverture annoncé aux lecteurs d'écran
+  if(a && !a.id) a.id='faq-panel-'+(i+1);
+  b.setAttribute('aria-expanded', qa.classList.contains('open') ? 'true' : 'false');
+  if(a) b.setAttribute('aria-controls', a.id);
+  b.addEventListener('click',()=>{
+    const open=qa.classList.contains('open');
+    qa.classList.toggle('open'); a.style.maxHeight=open?null:a.scrollHeight+'px';
+    b.setAttribute('aria-expanded', open ? 'false' : 'true');
+  });
+});
 $("#burger").addEventListener('click',()=>{
   const open=$("#navLinks").classList.toggle('open');
   $("#burger").setAttribute('aria-expanded', open);
@@ -1587,31 +1602,55 @@ $("#year").textContent=new Date().getFullYear();
 /* ====== CONSENTEMENT COOKIES (gère le Meta Pixel) ====== */
 (function(){
   var KEY='cookie_consent';
-  var choice=null;
+  var choice=null, wired=false;
   try{ choice=localStorage.getItem(KEY); }catch(e){}
-  // Choix déjà fait : on agit tout de suite, sans bandeau.
-  if(choice==='granted'){ if(typeof enableMetaPixel==='function') enableMetaPixel(); return; }
-  if(choice==='denied'){ return; }
-  // Pas de choix : on affiche le bandeau une fois le DOM prêt.
-  function initBanner(){
+  // Choix déjà fait : on l'applique tout de suite (sans afficher le bandeau).
+  if(choice==='granted' && typeof enableMetaPixel==='function') enableMetaPixel();
+
+  function wire(){
+    if(wired) return; wired=true;
     var banner=document.getElementById('cookieBanner');
     if(!banner) return;
-    banner.hidden=false;
     function decide(val){
+      var prev=null; try{ prev=localStorage.getItem(KEY); }catch(e){}
       try{ localStorage.setItem(KEY,val); }catch(e){}
       banner.hidden=true;
+      // Retrait du consentement : on recharge pour ne plus charger le pixel.
+      if(prev==='granted' && val==='denied'){ location.reload(); return; }
       if(val==='granted' && typeof enableMetaPixel==='function') enableMetaPixel();
     }
     document.getElementById('cookieAccept').addEventListener('click',function(){ decide('granted'); });
     document.getElementById('cookieRefuse').addEventListener('click',function(){ decide('denied'); });
   }
+  // Rouvrir le bandeau à la demande (lien « Gérer les cookies » du footer).
+  window.openCookieBanner=function(){
+    wire();
+    var b=document.getElementById('cookieBanner');
+    if(b){ b.hidden=false; b.scrollIntoView({block:'nearest'}); }
+  };
+  function initBanner(){
+    wire();
+    // Pas de choix enregistré : on affiche le bandeau.
+    if(choice!=='granted' && choice!=='denied'){
+      var b=document.getElementById('cookieBanner');
+      if(b) b.hidden=false;
+    }
+  }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initBanner);
   else initBanner();
+
+  // Lien « Gérer les cookies » du footer
+  function wireManage(){
+    var l=document.getElementById('manageCookies');
+    if(l) l.addEventListener('click',function(e){ e.preventDefault(); window.openCookieBanner(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wireManage);
+  else wireManage();
 })();
 </script>
 <!-- Bandeau consentement cookies -->
 <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Consentement aux cookies" hidden>
-  <p>🍪 On utilise des cookies pour mesurer l'audience du site. <a data-legal="cgv">En savoir plus</a></p>
+  <p>🍪 On utilise des cookies pour mesurer l'audience et améliorer nos publicités. <a data-legal="cgv">En savoir plus</a></p>
   <div class="cookie-actions">
     <button class="cookie-btn refuse" id="cookieRefuse" type="button">Refuser</button>
     <button class="cookie-btn accept" id="cookieAccept" type="button">Accepter</button>
