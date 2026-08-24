@@ -375,8 +375,16 @@ function enableMetaPixel(){
   .acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
   .acc{display:flex;flex-direction:column;gap:9px;border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;background:var(--panel2);transition:border-color .2s,transform .2s}
   .acc:hover{border-color:var(--violet);transform:translateY(-2px)}
-  .acc:has(input:checked){border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta) inset}
-  .acc img{width:100%;height:120px;object-fit:contain;background:#fff;border-radius:10px;display:block}
+  .acc.on{border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta) inset}
+  .qty{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:2px}
+  .qbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:1.1rem;font-weight:800;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:border-color .2s,opacity .2s;font-family:inherit}
+  .qbtn:hover:not(:disabled){border-color:var(--violet)}
+  .qbtn:disabled{opacity:.28;cursor:default}
+  .qval{min-width:24px;text-align:center;font-weight:800;font-size:1.02rem}
+  .acc img{width:100%;height:120px;object-fit:contain;border-radius:10px;display:block;padding:6px;background:
+      radial-gradient(120% 90% at 30% 10%,rgba(138,75,255,.45),transparent 55%),
+      radial-gradient(120% 90% at 80% 100%,rgba(35,230,207,.35),transparent 55%),
+      linear-gradient(160deg,#1b1235,#0c0820)}
   .acc-head{display:flex;align-items:center;gap:9px}
   .acc-txt{display:flex;flex-direction:column;gap:1px;font-size:.87rem;line-height:1.35}
   .acc-txt small{color:var(--muted);font-size:.75rem}
@@ -804,18 +812,30 @@ function enableMetaPixel(){
         <div class="field">
           <label>4. Accessoires <span style="color:var(--muted);font-weight:400">(facultatif)</span></label>
           <div class="acc-grid">
-            <label class="acc">
+            <div class="acc" id="accMicro">
               <img src="images/micro-xlr.webp" alt="Micro filaire dynamique avec son câble XLR" width="800" height="936" loading="lazy">
-              <span class="acc-head"><input type="checkbox" id="optMicro" class="opt-check">
+              <div class="acc-head">
                 <span class="acc-txt"><b>🎤 Micro filaire</b><small>câble XLR 5 m inclus</small></span>
-                <span class="acc-price" id="pMicro">+10€</span></span>
-            </label>
-            <label class="acc">
+                <span class="acc-price" id="pMicro">+10€</span>
+              </div>
+              <div class="qty">
+                <button type="button" class="qbtn" data-acc="micro" data-delta="-1" aria-label="Retirer un micro">−</button>
+                <span class="qval" id="qMicro" aria-live="polite">0</span>
+                <button type="button" class="qbtn" data-acc="micro" data-delta="1" aria-label="Ajouter un micro">+</button>
+              </div>
+            </div>
+            <div class="acc" id="accCable">
               <img src="images/cable-xlr.webp" alt="Câble XLR mâle-femelle de 5 mètres" width="554" height="554" loading="lazy">
-              <span class="acc-head"><input type="checkbox" id="optCable" class="opt-check">
+              <div class="acc-head">
                 <span class="acc-txt"><b>🔌 Câble XLR 5 m</b><small>mâle-femelle</small></span>
-                <span class="acc-price" id="pCable">+5€</span></span>
-            </label>
+                <span class="acc-price" id="pCable">+5€</span>
+              </div>
+              <div class="qty">
+                <button type="button" class="qbtn" data-acc="cable" data-delta="-1" aria-label="Retirer un câble">−</button>
+                <span class="qval" id="qCable" aria-live="polite">0</span>
+                <button type="button" class="qbtn" data-acc="cable" data-delta="1" aria-label="Ajouter un câble">+</button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1280,16 +1300,16 @@ function weekendSurcharge(start,end){
 }
 /* Jour précis à tarif 1 jour = 79€ (demande ponctuelle, discret, pas de libellé) */
 const SPECIAL_DAY_79='2026-07-14';
-/* Accessoires : tarif par PALIER DE 2 JOURS (1-2 j = prix de base, 3-4 j = x2, etc.) */
-const ACC = { micro:{ label:"Micro filaire (câble XLR 5 m inclus)", base:10 },
-              cable:{ label:"Câble XLR mâle-femelle 5 m",           base:5  } };
+/* Accessoires : tarif par PALIER DE 2 JOURS, avec quantité (max 2 : l'enceinte a 2 entrées XLR) */
+const ACC = { micro:{ label:"Micro filaire (câble XLR 5 m inclus)", base:10, max:2, qty:0 },
+              cable:{ label:"Câble XLR mâle-femelle 5 m",           base:5,  max:2, qty:0 } };
 function accTier(days){ return days>0 ? Math.ceil(days/2) : 1; }
 function accPrice(base,days){ return base*accTier(days); }
-function micOn(){ const e=$("#optMicro"); return !!(e&&e.checked); }
-function cableOn(){ const e=$("#optCable"); return !!(e&&e.checked); }
-function accCost(days){ return (micOn()?accPrice(ACC.micro.base,days):0)+(cableOn()?accPrice(ACC.cable.base,days):0); }
-function accList(){ const l=[]; if(micOn()) l.push(ACC.micro.label); if(cableOn()) l.push(ACC.cable.label); return l; }
-function accLabel(){ if(micOn()&&cableOn()) return 'Micro + câble XLR 🎤'; if(micOn()) return 'Micro filaire 🎤'; if(cableOn()) return 'Câble XLR 🔌'; return 'Accessoires 🎤'; }
+function accCost(days){ return Object.keys(ACC).reduce((t,k)=>t+ACC[k].qty*accPrice(ACC[k].base,days),0); }
+function accList(){ const l=[]; Object.keys(ACC).forEach(k=>{ const a=ACC[k]; if(a.qty>0) l.push((a.qty>1?a.qty+" × ":"")+a.label); }); return l; }
+function accLabel(){ const m=ACC.micro.qty,c=ACC.cable.qty;
+  if(m&&c) return 'Micro + câble XLR 🎤'; if(m) return (m>1?m+' micros':'Micro filaire')+' 🎤'; if(c) return (c>1?c+' câbles XLR':'Câble XLR')+' 🔌'; return 'Accessoires 🎤'; }
+function accSetQty(key,delta){ const a=ACC[key]; if(!a) return; a.qty=Math.max(0,Math.min(a.max,a.qty+delta)); render(); }
 /* Livraison & reprise (option, Paris intra-muros) : +39€ par trajet */
 const DELIVERY_FEE=39;
 function livrOn(){ const el=$("#optLivr"); return !!(el&&el.checked); }
@@ -1307,9 +1327,16 @@ function render(){
   const promoDisco=promoDiscountFor(days);
   const total=Math.max(0, pricing.total+bat+wknd+livr+acc-promoDisco);
   // prix affichés sur les cartes accessoires (ils suivent la durée choisie)
-  const pm=$("#pMicro"), pc=$("#pCable");
-  if(pm) pm.textContent='+'+accPrice(ACC.micro.base,days)+'€';
-  if(pc) pc.textContent='+'+accPrice(ACC.cable.base,days)+'€';
+  [['micro','#pMicro','#qMicro','#accMicro'],['cable','#pCable','#qCable','#accCable']].forEach(function(x){
+    const a=ACC[x[0]], unit=accPrice(a.base,days), pEl=$(x[1]), qEl=$(x[2]), card=$(x[3]);
+    if(pEl) pEl.textContent='+'+(a.qty>0? a.qty*unit : unit)+'€';
+    if(qEl) qEl.textContent=a.qty;
+    if(card) card.classList.toggle('on', a.qty>0);
+    document.querySelectorAll('.qbtn[data-acc="'+x[0]+'"]').forEach(function(b){
+      const d=parseInt(b.dataset.delta,10);
+      b.disabled = (d<0 && a.qty<=0) || (d>0 && a.qty>=a.max);
+    });
+  });
   const rowAcc=$("#rowAcc");
   if(rowAcc){ if(acc>0){ rowAcc.style.display='flex'; $("#sAccLabel").textContent=accLabel(); $("#sAcc").textContent='+'+eur(acc); } else rowAcc.style.display='none'; }
   $("#sDates").textContent=(selStart&&selEnd&&days>=1)?`${fr(selStart)} → ${fr(selEnd)}`:"—";
@@ -1431,8 +1458,7 @@ $("#submitBtn").addEventListener('click', async ()=>{
   $("#name").value='';$("#email").value='';$("#phone").value='';$("#message").value='';
   if($("#optBat")) $("#optBat").checked=false;
   if($("#optLivr")) $("#optLivr").checked=false;
-  if($("#optMicro")) $("#optMicro").checked=false;
-  if($("#optCable")) $("#optCable").checked=false;
+  ACC.micro.qty=0; ACC.cable.qty=0;
   if($("#optRepri")) $("#optRepri").checked=false;
   updateSel(); renderCalendar();
   btn.disabled=false; btn.textContent=old;
@@ -1548,7 +1574,8 @@ $("#burger").addEventListener('click',()=>{
 document.querySelectorAll('#navLinks a').forEach(a=>a.addEventListener('click',()=>$("#navLinks").classList.remove('open')));
 $("#calPrev").addEventListener('click',()=>{ view.setMonth(view.getMonth()-1); renderCalendar(); });
 $("#calNext").addEventListener('click',()=>{ view.setMonth(view.getMonth()+1); renderCalendar(); });
-document.querySelectorAll('input[name="payChoice"],input[name="soldeMode"],#optBat,#optLivr,#optRepri,#optMicro,#optCable').forEach(r=>r.addEventListener('change',render));
+document.querySelectorAll('.qbtn').forEach(b=>b.addEventListener('click',()=>accSetQty(b.dataset.acc,parseInt(b.dataset.delta,10))));
+document.querySelectorAll('input[name="payChoice"],input[name="soldeMode"],#optBat,#optLivr,#optRepri').forEach(r=>r.addEventListener('change',render));
 const _gbtn=$("#googleBtn"); if(_gbtn && GOOGLE_BUSINESS_URL) _gbtn.href=GOOGLE_BUSINESS_URL;
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%6*0.05)+'s';io.observe(el);});
