@@ -370,7 +370,7 @@ function enableMetaPixel(){
   .selinfo{margin-top:14px;font-size:.92rem;color:var(--ink)}
   .selinfo b{color:var(--cyan)}
 
-  .summary{position:sticky;top:90px;border:1px solid var(--line);border-radius:24px;padding:28px;background:linear-gradient(170deg,var(--panel2),rgba(18,12,32,.7))}
+  .summary{position:sticky;top:var(--sticky-top,90px);border:1px solid var(--line);border-radius:24px;padding:28px;background:linear-gradient(170deg,var(--panel2),rgba(18,12,32,.7))}
   /* Accessoires en option (micro / câble XLR) */
   .acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
   .acc{display:flex;flex-direction:column;gap:9px;border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;background:var(--panel2);transition:border-color .2s,transform .2s}
@@ -1372,6 +1372,7 @@ function render(){
   const sBox=$("#soldeBox"); if(sBox) sBox.hidden=(choice!=='acompte');
   const online=days?montantAPayer(total,choice):0;
   const so=$("#sOnline"); if(so) so.textContent=days?eur(online):"—";
+  if(typeof syncSummarySticky==='function') syncSummarySticky();
 }
 
 /* ====== SOUMISSION ====== */
@@ -1580,6 +1581,18 @@ const _gbtn=$("#googleBtn"); if(_gbtn && GOOGLE_BUSINESS_URL) _gbtn.href=GOOGLE_
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%6*0.05)+'s';io.observe(el);});
 $("#year").textContent=new Date().getFullYear();
+
+/* ====== ENCART RÉCAP : ne commence à suivre le scroll qu'une fois vu en entier ====== */
+function syncSummarySticky(){
+  const s=document.querySelector('.summary'); if(!s) return;
+  if(getComputedStyle(s).position!=='sticky'){ s.style.removeProperty('--sticky-top'); return; }
+  const h=s.offsetHeight, vh=window.innerHeight, HAUT=90, MARGE=24;
+  // s'il tient dans la fenêtre -> comportement normal ; sinon on l'ancre par le bas
+  const top = (h + HAUT + MARGE <= vh) ? HAUT : Math.round(vh - h - MARGE);
+  s.style.setProperty('--sticky-top', top+'px');
+}
+window.addEventListener('resize', syncSummarySticky);
+window.addEventListener('load', syncSummarySticky);
 
 /* ====== CARROUSEL PHOTOS ====== */
 (function carousel(){
