@@ -1543,6 +1543,7 @@ const LEGAL = {
     <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité et d'opposition. Pour l'exercer : <a href="mailto:aubin.simon.pro@gmail.com" style="color:var(--cyan)">aubin.simon.pro@gmail.com</a>. Vous pouvez également introduire une réclamation auprès de la <b>CNIL</b> (cnil.fr).</p>
     <h4>Cookies</h4>
     <p><b>Cookies techniques</b> (sans consentement) : strictement nécessaires au fonctionnement du site (mémorisation de votre choix en matière de cookies, sécurité du paiement Stripe).</p>
+    <p><b>Mesure d'audience interne</b> (sans consentement requis) : nous comptons les visites <b>sans cookie et sans transfert</b> vers un service tiers. Aucune information n'est écrite sur votre appareil et <b>votre adresse IP n'est jamais conservée</b> : elle sert uniquement à calculer une empreinte technique, <b>renouvelée chaque jour</b>, qui ne permet ni de vous identifier ni de vous suivre d'un jour à l'autre ou d'un site à l'autre. Nous ne conservons du site d'origine que son <b>nom de domaine</b> (par exemple google.com), jamais l'adresse complète. Données hébergées dans l'Union européenne, conservées 13 mois maximum.</p>
     <p><b>Cookies de mesure et de publicité</b> (soumis à votre consentement) : le <b>pixel Meta</b> (Meta Platforms Ireland Ltd) est utilisé pour mesurer l'audience de nos publicités et améliorer leur ciblage. Il n'est <b>déposé qu'après votre acceptation</b> via le bandeau cookies, et jamais si vous refusez. Durée de conservation : 13 mois maximum. Ces données peuvent faire l'objet d'un transfert hors Union européenne, encadré par les clauses contractuelles types de la Commission européenne.</p>
     <p><b>Retirer votre consentement</b> : vous pouvez modifier votre choix à tout moment via le lien <b>« Gérer les cookies »</b> en bas de page. Le retrait est aussi simple que l'acceptation.</p>`
 };
@@ -1733,5 +1734,20 @@ window.addEventListener('load', syncSummarySticky);
     <button class="cookie-btn accept" id="cookieAccept" type="button">Accepter</button>
   </div>
 </div>
+<!-- Mesure d'audience INTERNE, sans cookie ni service tiers :
+     rien n'est écrit sur l'appareil du visiteur, aucune IP n'est conservée. -->
+<script>
+(function(){try{
+  var u=new URL(location.href), q=u.searchParams;
+  var d=JSON.stringify({p:u.pathname, r:document.referrer||"",
+    s:q.get("utm_source")||"", m:q.get("utm_medium")||"", c:q.get("utm_campaign")||""});
+  var url="https://fjadiqwhjatywwwubmqu.supabase.co/functions/v1/track";
+  // type "text/plain" OBLIGATOIRE : avec "application/json" le navigateur exige un
+  // contrôle CORS préalable que sendBeacon ne sait pas faire -> requête abandonnée
+  // en silence (sendBeacon renvoie quand même true). Le serveur parse le JSON quand même.
+  if(navigator.sendBeacon){ navigator.sendBeacon(url, new Blob([d],{type:"text/plain"})); }
+  else { fetch(url,{method:"POST",headers:{"Content-Type":"text/plain"},body:d,keepalive:true}).catch(function(){}); }
+}catch(e){}})();
+</script>
 </body>
 </html>
