@@ -1294,7 +1294,10 @@ function weekendSurcharge(start,end){
 }
 /* Jour précis à tarif 1 jour = 79€ (demande ponctuelle, discret, pas de libellé) */
 const SPECIAL_DAY_79='2026-07-14';
-/* Accessoires : tarif par PALIER DE 2 JOURS, avec quantité (max 2 : l'enceinte a 2 entrées XLR) */
+/* Accessoires : tarif par PALIER DE 2 JOURS, avec quantité.
+   STOCK RÉEL : 2 câbles XLR en tout. Chaque micro est fourni AVEC son câble,
+   il en consomme donc un. => micros + câbles seuls <= 2 (jamais 2 micros ET 2 câbles). */
+const STOCK_XLR = 2;
 const ACC = { micro:{ label:"Micro filaire (câble XLR 5 m inclus)", base:10, max:2, qty:0 },
               cable:{ label:"Câble XLR mâle-femelle 5 m",           base:5,  max:2, qty:0 } };
 function accTier(days){ return days>0 ? Math.ceil(days/2) : 1; }
@@ -1303,7 +1306,10 @@ function accCost(days){ return Object.keys(ACC).reduce((t,k)=>t+ACC[k].qty*accPr
 function accList(){ const l=[]; Object.keys(ACC).forEach(k=>{ const a=ACC[k]; if(a.qty>0) l.push((a.qty>1?a.qty+" × ":"")+a.label); }); return l; }
 function accLabel(){ const m=ACC.micro.qty,c=ACC.cable.qty;
   if(m&&c) return 'Micro + câble XLR 🎤'; if(m) return (m>1?m+' micros':'Micro filaire')+' 🎤'; if(c) return (c>1?c+' câbles XLR':'Câble XLR')+' 🔌'; return 'Accessoires 🎤'; }
-function accSetQty(key,delta){ const a=ACC[key]; if(!a) return; a.qty=Math.max(0,Math.min(a.max,a.qty+delta)); render(); }
+function accUsed(sauf){ return Object.keys(ACC).reduce(function(t,k){ return t+(k===sauf?0:ACC[k].qty); },0); }
+function accSetQty(key,delta){ const a=ACC[key]; if(!a) return;
+  const dispo=Math.min(a.max, STOCK_XLR-accUsed(key));   // ce qu'il reste vraiment
+  a.qty=Math.max(0,Math.min(dispo,a.qty+delta)); render(); }
 /* Livraison & reprise (option, Paris intra-muros) : +39€ par trajet */
 const DELIVERY_FEE=39;
 function livrOn(){ const el=$("#optLivr"); return !!(el&&el.checked); }
@@ -1328,7 +1334,8 @@ function render(){
     if(card) card.classList.toggle('on', a.qty>0);
     document.querySelectorAll('.qbtn[data-acc="'+x[0]+'"]').forEach(function(b){
       const d=parseInt(b.dataset.delta,10);
-      b.disabled = (d<0 && a.qty<=0) || (d>0 && a.qty>=a.max);
+      const dispo=Math.min(a.max, STOCK_XLR-accUsed(x[0]));
+      b.disabled = (d<0 && a.qty<=0) || (d>0 && a.qty>=dispo);
     });
   });
   const rowAcc=$("#rowAcc");
