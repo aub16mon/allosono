@@ -713,7 +713,7 @@ function enableMetaPixel(){
         <div class="pprice"><span class="from">À partir de</span><span class="amt">59€</span><span class="per">/ jour</span><span class="cau">· caution 400€ par empreinte</span></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
           <span style="padding:7px 14px;border-radius:999px;border:1px solid var(--line);font-size:.82rem;color:var(--muted)">1 jour · <b style="color:var(--ink)">59€</b></span>
-          <span style="padding:7px 14px;border-radius:999px;border:1px solid rgba(35,230,207,.4);background:rgba(35,230,207,.07);font-size:.82rem;color:var(--cyan)">🎉 Week-end (3j) · <b>99€</b> <span style="opacity:.7;font-size:.75rem">au lieu de 147€</span></span>
+          <span style="padding:7px 14px;border-radius:999px;border:1px solid rgba(35,230,207,.4);background:rgba(35,230,207,.07);font-size:.82rem;color:var(--cyan)">🎉 Week-end (3j) · <b>99€</b> <span style="opacity:.7;font-size:.75rem">au lieu de 177€</span></span>
           <span style="padding:7px 14px;border-radius:999px;border:1px solid rgba(138,75,255,.4);background:rgba(138,75,255,.07);font-size:.82rem;color:var(--violet)">🗓️ Semaine (7j) · <b>139€</b> <span style="opacity:.7;font-size:.75rem">au lieu de 343€</span></span>
         </div>
         <a href="#reservation" class="btn btn-primary">Vérifier les dates & réserver →</a>
@@ -1080,9 +1080,8 @@ function enableMetaPixel(){
 const PRODUCT = { name:"JBL PartyBox 520", price:59, extraDay:20, caution:400 };
 
 /* ====== TARIF DÉGRESSIF : 1j 59€ · 2j 79€ · 3j 99€ · puis +20€/jour ======
-   Majoration de 20 € si la location couvre un samedi ou un dimanche
-   (weekendSurcharge). Volontairement NON détaillée à l'écran : le client
-   ne voit que le total. Seules les CGV l'annoncent, comme la loi l'exige. */
+   AUCUNE majoration week-end (2026-11-23) : le week-end type Ven -> Lun
+   fait 3 jours, donc 99 € au tarif normal. Voir WEEKEND_FEE plus bas. */
 function getPrice(days){
   if(!days) return { total:0, label:'—', badge:null, saving:null };
   let total;
@@ -1289,10 +1288,13 @@ function promoDiscountFor(days){
   return promoValid.discount;
 }
 /* Samedi et dimanche : aucun retrait ni retour (calendrier grisé).
-   Supplément week-end : +20€ dès que la location COUVRE un samedi ou un dimanche
-   (typiquement Ven -> Lun). Une location en semaine n'est donc pas majorée. */
+   SUPPLÉMENT WEEK-END SUPPRIMÉ le 2026-11-23 (WEEKEND_FEE=0) : un week-end
+   Ven -> Lun = 3 jours = 99 € au tarif dégressif normal, sans majoration.
+   ⚠️ Ne pas remettre à 20 sans validation : le site et les CGV ne parlent
+   plus nulle part d'un supplément week-end, le facturer serait inopposable.
+   La mécanique est conservée (et neutre) au cas où on la réactiverait. */
 function isWeekendDay(ds){ const d=new Date(ds+'T12:00').getDay(); return d===0||d===6; }
-const WEEKEND_FEE=20;
+const WEEKEND_FEE=0;
 function weekendSurcharge(start,end){
   if(!start||!end) return 0;
   let d=start;
@@ -1517,7 +1519,7 @@ const LEGAL = {
     <p>Une <b>empreinte bancaire de 400 €</b> est exigée à titre de garantie. La veille du retrait, un lien sécurisé Stripe est envoyé au locataire pour l'autoriser : <b>aucun montant n'est débité</b>, la somme est simplement <b>bloquée</b> sur la carte, puis <b>libérée au retour</b> du matériel en bon état de fonctionnement. L'empreinte expire automatiquement après quelques jours.</p>
     <p>Cette empreinte de 400 € <b>ne limite pas</b> la responsabilité du locataire : en cas de dommage, de perte ou de vol, l'empreinte est capturée et le locataire reste redevable du solde éventuel dans les conditions de l'article 7.</p>
     <h4>6. Retrait et retour du matériel</h4>
-    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, 7 jours sur 7, aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
+    <p>Le matériel est à retirer et à restituer au <b>53 rue des Batignolles, 75017 Paris</b>, du lundi au vendredi, aux dates convenues lors de la réservation. Tout retard de retour non signalé sera facturé à la journée supplémentaire.</p>
     <h4>7. Responsabilité du locataire</h4>
     <p>Le locataire s'engage à utiliser le matériel conformément à sa destination, à ne pas le sous-louer, et à le restituer dans l'état dans lequel il l'a reçu. En cas de dommage, de perte ou de vol, le locataire est responsable des frais de réparation ou de remplacement <b>à concurrence de la valeur de remplacement à neuf (prix de revente conseillé) de l'ensemble du matériel loué et de ses accessoires</b>, telle que constatée au jour du sinistre. À titre indicatif, le PRC de l'enceinte JBL PartyBox 520 s'élève à <b>800 €</b> ; le montant total dépend du matériel effectivement loué (accessoires compris). L'empreinte de caution (400 €) est alors capturée en priorité, et le <b>solde éventuel reste dû</b> par le locataire sur la base du contrat de location accepté.</p>
     <h4>8. Annulation</h4>
